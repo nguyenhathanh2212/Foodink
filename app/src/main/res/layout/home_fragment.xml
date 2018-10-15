@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+            <ViewFlipper
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/view_flipper">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/slider1"
+                    android:scaleType="centerCrop"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/slider2"
+                    android:scaleType="centerCrop"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/slider3"
+                    android:scaleType="centerCrop"/>
+            </ViewFlipper>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="25dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/category"
+                android:textColor="@android:color/black" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/story"
+                android:height="25dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_store"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+</LinearLayout>
