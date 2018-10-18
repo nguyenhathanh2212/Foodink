@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:id="@+id/homeViewLayout">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ebebeb">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
                 android:id="@+id/view_flipper">
                 <ImageView
                     android:layout_width="match_parent"
@@ -36,21 +40,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="5dp"
+            android:background="#F2F2F2">
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:height="25dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/category"
-                android:textColor="@android:color/black" />
+                android:padding="10dp"
+                android:background="@drawable/border_item_home">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <ImageView
+                        android:src="@drawable/category"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category"
+                        android:paddingLeft="15dp"
+                        android:textColor="#333"
+                        android:textSize="16dp"/>
+                </LinearLayout>
+            </RelativeLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_category"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
@@ -58,21 +78,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
+            android:orientation="vertical"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="5dp"
+            android:background="#F2F2F2">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/story"
-                android:height="25dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:padding="10dp"
+                android:background="@drawable/border_item_home">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <ImageView
+                        android:src="@drawable/store"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/store"
+                        android:paddingLeft="15dp"
+                        android:textColor="#333"
+                        android:textSize="16dp"/>
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:id="@+id/btn_more_store"
+                    android:text="Xem thêm &#xf105;"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12dp"
+                    android:textAllCaps="false"
+                    android:background="#fff"/>
+            </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_store"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

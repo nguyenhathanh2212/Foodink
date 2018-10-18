@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="2dp"
+    android:layout_margin="5dp"
     card_view:cardCornerRadius="8dp">
 
     <LinearLayout
@@ -12,18 +12,21 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/img_item"
+            android:id="@+id/img_item_category"
             android:layout_width="match_parent"
             android:layout_height="130dp"
+            android:scaleType="centerCrop"
             card_view:srcCompat="@android:color/holo_blue_dark" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:id="@+id/txt_item_name"
+            android:id="@+id/txt_item_name_category"
             android:text="item"
             android:textColor="@android:color/black"
             android:background="#ddd"
-            android:textSize="14sp"/>
+            android:textSize="15sp"
+            android:paddingLeft="5dp"
+            android:textAlignment="center"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 

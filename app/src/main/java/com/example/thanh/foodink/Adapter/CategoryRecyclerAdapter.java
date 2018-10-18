@@ -1,6 +1,5 @@
 package com.example.thanh.foodink.Adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.thanh.foodink.Models.Category;
 import com.example.thanh.foodink.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private ArrayList<String> listData;
+public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.ViewHolder> {
+    private ArrayList<Category> listData;
 
-    public RecyclerAdapter(ArrayList<String> listData) {
+    public CategoryRecyclerAdapter(ArrayList<Category> listData) {
         this.listData = listData;
     }
 
@@ -31,7 +32,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.txtName.setText(listData.get(i));
+        viewHolder.txtName.setText(listData.get(i).getName());
+        String imageUrl = listData.get(i).getImage();
+        if (!imageUrl.equals("")) {
+            Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(R.drawable.loader)
+                    .error(R.drawable.noimage)
+                    .into(viewHolder.imageView);
+        } else {
+            viewHolder.imageView.setImageResource(R.drawable.noimage);
+        }
     }
 
     @Override
@@ -45,8 +56,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.img_item);
-            txtName = itemView.findViewById(R.id.txt_item_name);
+            imageView = itemView.findViewById(R.id.img_item_category);
+            txtName = itemView.findViewById(R.id.txt_item_name_category);
         }
     }
 }
