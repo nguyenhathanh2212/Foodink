@@ -8,4 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="category">Danh mục</string>
     <string name="story">Cửa hàng</string>
+
+    <!-- Font awesome icon -->
+    <string name="fa_angle_right">&#xf105;</string>
+    <string name="fa_arrow_left">&#xf060;</string>
 </resources>

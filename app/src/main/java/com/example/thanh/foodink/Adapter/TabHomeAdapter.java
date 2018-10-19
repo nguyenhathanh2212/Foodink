@@ -12,34 +12,32 @@ import com.example.thanh.foodink.Fragment.OrderFragment;
 import com.example.thanh.foodink.Fragment.ProfileFragment;
 import com.example.thanh.foodink.R;
 
+import java.util.ArrayList;
+
 public class TabHomeAdapter extends FragmentStatePagerAdapter {
-    private HomeFragment homeFragment;
-    private OrderFragment orderFragment;
-    private NotificationFragment notificationFragment;
-    private ProfileFragment profileFragment;
+//    private HomeFragment homeFragment;
+//    private OrderFragment orderFragment;
+//    private NotificationFragment notificationFragment;
+//    private ProfileFragment profileFragment;
+
+    private ArrayList<Fragment> fragments;
 
     public TabHomeAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        homeFragment = new HomeFragment();
-        orderFragment = new OrderFragment();
-        notificationFragment = new NotificationFragment();
-        profileFragment = new ProfileFragment();
+        fragments = new ArrayList<>();
+        fragments.add(new HomeFragment());
+        fragments.add(new OrderFragment());
+        fragments.add(new NotificationFragment());
+        fragments.add(new ProfileFragment());
     }
 
     @Override
     public Fragment getItem(int i) {
-        switch (i) {
-            case 0: return homeFragment;
-            case 1: return orderFragment;
-            case 2: return notificationFragment;
-            case 3: return profileFragment;
-        }
-
-        return null;
+        return fragments.get(i);
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return fragments.size();
     }
 }
