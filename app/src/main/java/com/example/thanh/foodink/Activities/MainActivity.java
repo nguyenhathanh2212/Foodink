@@ -1,4 +1,4 @@
-package com.example.thanh.foodink;
+package com.example.thanh.foodink.Activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.thanh.foodink.Adapter.TabHomeAdapter;
+import com.example.thanh.foodink.R;
 
 public class MainActivity extends AppCompatActivity {
 
