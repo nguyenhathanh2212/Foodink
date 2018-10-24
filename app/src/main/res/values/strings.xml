@@ -7,7 +7,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="category">Danh mục</string>
-    <string name="story">Cửa hàng</string>
+    <string name="store">Cửa hàng</string>
 
     <!-- Font awesome icon -->
     <string name="fa_angle_right">&#xf105;</string>
