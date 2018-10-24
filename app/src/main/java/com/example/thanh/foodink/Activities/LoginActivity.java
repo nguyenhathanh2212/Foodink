@@ -1,48 +1,29 @@
 package com.example.thanh.foodink.Activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.Configs.ResponseStatusCode;
 import com.example.thanh.foodink.Exceptions.ValidationException;
 import com.example.thanh.foodink.Helpers.FontManager;
 import com.example.thanh.foodink.Helpers.Progresser;
@@ -50,10 +31,7 @@ import com.example.thanh.foodink.Helpers.Validation;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
     private TextView btnBack;
@@ -99,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
         btnBack.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -114,6 +93,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             case R.id.btnLogin:
                 login();
                 break;
+            case R.id.btnRegister:
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -122,20 +105,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
 
-            if (email.equals("")) {
-                edtEmail.requestFocus();
-                throw new ValidationException("Email không được để trống");
-            }
-
-            if (password.equals("")) {
-                edtPassword.requestFocus();
-                throw new ValidationException("Password không được để trống");
-            }
-
-            if (!Validation.isValidEmaillId(email)) {
-                edtEmail.requestFocus();
-                throw new ValidationException("Email phải hợp lệ");
-            }
+            validate(email, password);
 
             progress.show();
             JSONObject params = new JSONObject();
@@ -166,11 +136,13 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                             String name = userInfo.getString("name");
                             String phone = userInfo.getString("phone");
                             String address = userInfo.getString("address");
+                            String avatar = userInfo.getString("avatar");
 
-                            User user = new User(id, email, name, phone, address, authToken);
+                            User user = new User(id, email, name, phone, address, avatar, authToken);
                             User.setUserAuth(LoginActivity.this, user);
 
-                            Toast.makeText(LoginActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                            finish();
                         } catch (ValidationException e) {
                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
@@ -185,7 +157,26 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progress.hide();
-                        Toast.makeText(LoginActivity.this, "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                        String msg = "Có lỗi, vui lòng thử lại";
+
+                        NetworkResponse response = error.networkResponse;
+                        if (response != null && response.statusCode == ResponseStatusCode.BAD_REQUEST) {
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                JSONObject data = new JSONObject(res);
+                                boolean isSuccess = data.getBoolean("success");
+
+                                if (!isSuccess) {
+                                    msg = "Đăng nhập thất bại, Email hoặc mật khẩu không đúng!";
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("ApiError", e.toString());
+                            }
+                        }
+
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Log.d("ApiError", error.toString());
                         error.printStackTrace();
                     }
@@ -202,6 +193,21 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         }
     }
 
+    private void validate(String email, String password) throws ValidationException {
+        if (email.equals("")) {
+            edtEmail.requestFocus();
+            throw new ValidationException("Email không được để trống");
+        }
 
+        if (password.equals("")) {
+            edtPassword.requestFocus();
+            throw new ValidationException("Mật khẩu không được để trống");
+        }
+
+        if (!Validation.isValidEmaillId(email)) {
+            edtEmail.requestFocus();
+            throw new ValidationException("Email phải hợp lệ");
+        }
+    }
 }
 

@@ -36,25 +36,12 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/lbLogin"
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="#000"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/login"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Đăng nhập tài khoản"
-                android:textColor="#fff"
-                android:paddingLeft="15dp"
-                android:textSize="17dp"/>
+            android:orientation="vertical">
         </LinearLayout>
 
         <ScrollView
@@ -64,6 +51,7 @@
             android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/userActionLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
@@ -167,6 +155,13 @@
                         android:textSize="20dp"
                         android:paddingTop="3dp"/>
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/logoutLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"></LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

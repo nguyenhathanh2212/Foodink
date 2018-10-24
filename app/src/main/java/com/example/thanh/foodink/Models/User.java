@@ -11,15 +11,17 @@ public class User {
     private String name;
     private String phone;
     private String address;
+    private String avatar;
     private String authToken;
     public static final String AUTH = "UserAuthenticate";
 
-    public User(int id, String email, String name, String phone, String address, String authToken) {
+    public User(int id, String email, String name, String phone, String address, String avatar, String authToken) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.avatar = avatar;
         this.authToken = authToken;
     }
 
@@ -71,6 +73,14 @@ public class User {
         this.authToken = authToken;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public static void setUserAuth(Context context, User user) {
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
@@ -91,5 +101,10 @@ public class User {
         String userJson = sessionManager.get(User.AUTH);
 
         return !userJson.equals("");
+    }
+
+    public static void logout(Context context) {
+        SessionManager sessionManager = new SessionManager(context);
+        sessionManager.forget(User.AUTH);
     }
 }
