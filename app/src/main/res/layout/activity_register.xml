@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,42 +31,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="Đăng nhập "
+            android:text="Đăng ký tài khoản "
             android:textColor="#fff"
             android:gravity="center"
-            android:textSize="25dp"
-            android:layout_marginBottom="15dp"/>
+            android:textSize="25dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="5dp">
 
             <ImageView
-                android:id="@+id/btnLoginFB"
+                android:id="@+id/btnRegisterFB"
                 android:src="@drawable/fb_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/btnLoginGG"
+                android:id="@+id/btnRegisterGG"
                 android:src="@drawable/google_plus_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/btnLoginTW"
+                android:id="@+id/btnRegisterTW"
                 android:src="@drawable/twitter_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -87,9 +84,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/user_icon_white"
+                android:paddingLeft="8dp"
+                android:hint="Tên"
+                android:textColorHint="#fff"
+                android:inputType="text"
+                android:drawablePadding="18dp"
+                android:textColor="#fff"/>
 
             <EditText
                 android:id="@+id/edtEmail"
@@ -97,8 +105,8 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@android:drawable/sym_action_email"
                 android:hint="Email"
-                android:drawablePadding="11dp"
                 android:textColorHint="#fff"
+                android:drawablePadding="11dp"
                 android:inputType="textWebEmailAddress"
                 android:textColor="#fff"/>
 
@@ -114,48 +122,44 @@
                 android:layout_marginTop="10dp"
                 android:textColor="#fff"/>
 
-            <Button
-                android:id="@+id/btnLogin"
+            <EditText
+                android:id="@+id/edtPasswordConfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đăng nhập"
+                android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+                android:hint="Xác nhận mật khẩu"
+                android:drawablePadding="15dp"
+                android:inputType="textWebPassword"
+                android:textColorHint="#fff"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"/>
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng ký"
                 android:textColor="#fff"
                 android:background="@drawable/border_radius_green_button"
                 android:textAllCaps="false"
                 android:layout_marginTop="20dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/btnForgotPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quên mật khẩu?"
-                android:textColor="#05a0bf"/>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="15dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chưa có tài khoản?"
+                    android:text="Đã có tài khoản?"
                     android:textColor="#fff"/>
 
                 <TextView
-                    android:id="@+id/btnRegister"
+                    android:id="@+id/btnLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng ký ngay"
+                    android:text="Đăng nhập ngay"
                     android:textColor="#05a0bf"
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
