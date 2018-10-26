@@ -9,4 +9,6 @@ public interface ApiUrl {
     public static final String API_STORES = "https://fudink.herokuapp.com/api/stores";
     public static final String API_CATEGORIES = "https://fudink.herokuapp.com/api/categories";
     public static final String API_SHIPPER_ORDER_LIST = API_URL + "dashboard/shipper_orders";
+    public static final String API_CARTS = "https://fudink.herokuapp.com/api/carts";
+    public static final String API_ORDERS = "https://fudink.herokuapp.com/api/orders";
 }

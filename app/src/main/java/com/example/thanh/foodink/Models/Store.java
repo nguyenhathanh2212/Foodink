@@ -13,6 +13,12 @@ public class Store implements Serializable {
     public Store() {
     }
 
+    public Store(int id, String name, ArrayList<String> images) {
+        this.id = id;
+        this.name = name;
+        this.images = images;
+    }
+
     public Store(int id, String name, String description, String location, ArrayList<String> images) {
         this.id = id;
         this.name = name;
@@ -34,7 +40,8 @@ public class Store implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return description == null || description.trim().equals("null") || description.trim()
+                .length() <= 0 ? "" : description;
     }
 
     public void setDescription(String description) {
@@ -43,6 +50,10 @@ public class Store implements Serializable {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getLocationLimit() {
+        return location.substring(0, 19) + "...";
     }
 
     public void setLocation(String location) {

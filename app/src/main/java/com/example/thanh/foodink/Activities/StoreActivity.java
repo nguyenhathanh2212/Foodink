@@ -1,16 +1,23 @@
 package com.example.thanh.foodink.Activities;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
@@ -21,7 +28,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Adapter.ProductRecycleAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.Helpers.CheckConnection;
 import com.example.thanh.foodink.Helpers.FontManager;
+import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Product;
 import com.example.thanh.foodink.Models.Size;
 import com.example.thanh.foodink.Models.Store;
@@ -44,13 +53,21 @@ public class StoreActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private JsonObjectRequest objectRequest;
     private ApiUrl apiUrl;
+    private Progresser progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store);
+        CheckConnection checkConnection = new CheckConnection(getBaseContext());
 
-        addControls();
+        if (checkConnection.isNetworkAvailable()) {
+            setContentView(R.layout.activity_store);
+
+            addControls();
+        } else {
+            setContentView(R.layout.login_request);
+        }
+
     }
 
     private void addControls() {
@@ -72,6 +89,7 @@ public class StoreActivity extends AppCompatActivity {
         LinearLayoutManager drinkLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         drinkRecyclerView.setLayoutManager(drinkLayoutManager);
         requestQueue = Volley.newRequestQueue(this);
+        progress = new Progresser(this, "", "Đang load dữ liệu...");
 
         setTabHost();
         getDrinkProduct(store.getId());
@@ -82,6 +100,7 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void getDrinkProduct(int id) {
+        progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 apiUrl.API_STORES + "/" + id + "?get_all=1",
@@ -89,6 +108,7 @@ public class StoreActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progress.hide();
                         try {
                             JSONArray jsonArray = response.getJSONObject("drink").getJSONArray("products");
 
@@ -122,7 +142,7 @@ public class StoreActivity extends AppCompatActivity {
 
                                 listData.add(new Product(id, name, description, rate, sizes, imageUrls));
                             }
-                            drinkRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext());
+                            drinkRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
                             drinkRecyclerView.setAdapter(drinkRecycleAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -132,13 +152,17 @@ public class StoreActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RESs", error.toString());
+                        progress.hide();
+                        Toast.makeText(getApplicationContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                        Log.d("ApiError", error.toString());
+                        error.printStackTrace();
                     }
                 }
         );
         requestQueue.add(objectRequest);
     }
     private void getFoodProduct(int id) {
+        progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 apiUrl.API_STORES + "/" + id + "?get_all=1",
@@ -146,6 +170,7 @@ public class StoreActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progress.hide();
                         try {
                             JSONArray jsonArray = response.getJSONObject("food").getJSONArray("products");
 
@@ -179,7 +204,7 @@ public class StoreActivity extends AppCompatActivity {
 
                                 listData.add(new Product(id, name, description, rate, sizes, imageUrls));
                             }
-                            foodRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext());
+                            foodRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
                             foodRecyclerView.setAdapter(foodRecycleAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -189,7 +214,10 @@ public class StoreActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RESs", error.toString());
+                        progress.hide();
+                        Toast.makeText(getApplicationContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                        Log.d("ApiError", error.toString());
+                        error.printStackTrace();
                     }
                 }
         );
@@ -208,6 +236,15 @@ public class StoreActivity extends AppCompatActivity {
         tabFood.setIndicator("Food");
         tabFood.setContent(R.id.tab_food);
         tabHostStore.addTab(tabFood);
+
+        Display display = getWindowManager().getDefaultDisplay();
+
+        tabHostStore.getTabWidget().getChildAt(0).setLayoutParams(new
+                LinearLayout.LayoutParams(display.getWidth() / 2, 90));
+        tabHostStore.getTabWidget().getChildAt(1).setLayoutParams(new
+                LinearLayout.LayoutParams(display.getWidth() / 2, 90));
+        tabHostStore.getTabWidget().getChildAt(0).getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
+        tabHostStore.getTabWidget().getChildAt(1).getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }
 
     private void setFlipper(ArrayList<String> imageUrls) {

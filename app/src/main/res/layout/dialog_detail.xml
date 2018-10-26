@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingTop="8dp"
+        android:background="#54aadc"
+        android:text="Chi tiết"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="3dp">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/image_detail_product"
+                android:src="@drawable/noimage"
+                android:scaleType="centerCrop"/>
+        </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_name_detail_product"
+                android:text="Name"
+                android:textColor="@color/name"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/linearlayout_rate_detail">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="#fff"
+                        android:src="@drawable/icon_sub"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/btimg_sub_number_item"/>
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="25dp"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:paddingTop="4dp"
+                        android:background="#fff"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/txt_number_item" />
+
+                    <ImageButton
+                        android:id="@+id/btimg_plus_number_item"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="5dp"
+                        android:background="#fff"
+                        android:src="@drawable/icon_plus" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_description_detail_product"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textColor="@color/description"
+        android:textSize="12sp"
+        android:scrollbars="vertical"
+        android:paddingLeft="10dp"
+        android:hyphenationFrequency="none" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn size"
+            android:textColor="#000"
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:background="#a6aba8"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/group_size_detail"
+            android:layout_marginBottom="30px"
+            android:background="#eaeaea">
+        </RadioGroup>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm vào giỏ (10.000đ)"
+        android:id="@+id/btn_detail_add_cart"
+        android:background="#54aadc"
+        android:textColor="#fff"
+        android:textAllCaps="false"/>
+</LinearLayout>

@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Activities.LoginActivity;
+import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Exceptions.ValidationException;
 import com.example.thanh.foodink.Helpers.FontManager;
@@ -75,13 +76,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showUserHeaderLayout() {
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = MainActivity.getFragManager();
         FragmentTransaction ft_rep = fm.beginTransaction();
         ft_rep.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
         if (User.checkUserAuth(getContext())) {
             ft_rep.replace(R.id.headerLayout, new UserInforFragment());
-            ft_rep.commit();
+            ft_rep = ft_rep.addToBackStack(null);
+            ft_rep.commitAllowingStateLoss();
 
             logoutLayout.removeAllViews();
             View logoutView = getLayoutInflater().inflate(R.layout.logout_fragment, null);
@@ -93,7 +95,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         } else {
             logoutLayout.removeAllViews();
             ft_rep.replace(R.id.headerLayout, new LoginFragment());
-            ft_rep.commit();
+            ft_rep = ft_rep.addToBackStack(null);
+            ft_rep.commitAllowingStateLoss();
         }
     }
 

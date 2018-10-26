@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thông báo !"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vui lòng kết nối điện thoại của bản với wifi hoặc 3g để sử dụng ứng dụng"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#d9d9d9">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Hủy"
+            android:textColor="#4286f2"
+            android:id="@+id/btn_dialog_checkconnection_cancel"
+            android:background="#fff"
+            android:textStyle="normal"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"/>
+        <Button
+            android:layout_marginTop="1dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Cài đặt"
+            android:id="@+id/btn_dialog_checkconnection_setting"
+            android:textColor="#e63b3b"
+            android:background="#fff"
+            android:textStyle="normal"
+            android:textSize="12sp"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+</LinearLayout>

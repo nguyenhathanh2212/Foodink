@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="30dp"
+        android:text="Đặt hàng"
+        android:gravity="center"
+        android:textColor="#ef9723"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:background="#ededed"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numeric="decimal"
+            android:id="@+id/ed_sdt"
+            android:hint="Nhập số điện thoại"
+            android:backgroundTint="@color/tab_order"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ed_address"
+            android:hint="Nhập địa chỉ giao hàng"
+            android:backgroundTint="@color/tab_order"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#d9d9d9"
+            android:layout_marginTop="30dp">
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Hủy"
+                android:textColor="#4286f2"
+                android:id="@+id/btn_cancel"
+                android:background="#fff"
+                android:textStyle="normal"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="1dp"
+                android:layout_marginRight="1dp"/>
+            <Button
+                android:layout_marginTop="1dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Đặt hàng"
+                android:id="@+id/btn_dat_hang"
+                android:textColor="#e63b3b"
+                android:background="#fff"
+                android:textStyle="normal"
+                android:textSize="12sp"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

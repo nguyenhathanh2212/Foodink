@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +20,25 @@ import java.util.ArrayList;
 
 public class StoreRecyclerAdapter extends RecyclerView.Adapter<StoreRecyclerAdapter.StoreViewHolder> {
     private ArrayList<Store> listData;
+    private int layoutId;
+    private boolean isAllStores = false;
 
-    public StoreRecyclerAdapter(ArrayList<Store> listData) {
+    public StoreRecyclerAdapter(ArrayList<Store> listData, int  layoutId) {
         this.listData = listData;
+        this.layoutId = layoutId;
+    }
+
+    public StoreRecyclerAdapter(ArrayList<Store> listData, int  layoutId, boolean isAllStores) {
+        this.listData = listData;
+        this.layoutId = layoutId;
+        this.isAllStores = isAllStores;
     }
 
     @NonNull
     @Override
     public StoreRecyclerAdapter.StoreViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = layoutInflater.inflate(R.layout.item_store, viewGroup, false);
+        View itemView = layoutInflater.inflate(layoutId, viewGroup, false);
 
         return new StoreRecyclerAdapter.StoreViewHolder(itemView);
     }
@@ -37,7 +47,12 @@ public class StoreRecyclerAdapter extends RecyclerView.Adapter<StoreRecyclerAdap
     public void onBindViewHolder(@NonNull StoreRecyclerAdapter.StoreViewHolder viewHolder, int i) {
         viewHolder.txtName.setText(listData.get(i).getName());
         viewHolder.txtDescription.setText(listData.get(i).getDescription());
-        viewHolder.txtLocation.setText(listData.get(i).getLocation());
+
+        if (isAllStores) {
+            viewHolder.txtLocation.setText(listData.get(i).getLocation());
+        } else {
+            viewHolder.txtLocation.setText(listData.get(i).getLocationLimit());
+        }
         ArrayList<String> imageUrls = listData.get(i).getImages();
 
         if (imageUrls.size() == 0 || imageUrls.get(0).equals("")) {

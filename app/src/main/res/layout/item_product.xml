@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/image_item_product"
-            android:src="@drawable/noimage"/>
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="3dp">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/image_item_product"
+                android:src="@drawable/noimage"
+                android:scaleType="centerCrop"/>
+        </android.support.v7.widget.CardView>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -25,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:text="Name"
-                android:textColor="@android:color/black"
+                android:textColor="@color/name"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:id="@+id/txt_name_item_product"/>
@@ -39,7 +46,7 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:text="Description"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/description"
                     android:textSize="12sp"
                     android:hyphenationFrequency="none" />
 
@@ -47,7 +54,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@android:drawable/ic_input_add"
-                    android:background="#fff"/>
+                    android:background="#fff"
+                    android:id="@+id/btimg_detail"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

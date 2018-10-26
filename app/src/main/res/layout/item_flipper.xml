@@ -9,31 +9,4 @@
         android:src="@drawable/slider1"
         android:scaleType="centerCrop"
         android:id="@+id/img_flipper"/>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_alignBottom="@+id/img_flipper"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:background="#6fcccccc">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:text="info"-->
-            <!--android:id="@+id/txt_title"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:textSize="15sp"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:text="info"-->
-            <!--android:id="@+id/txt_desciption"/>-->
-
-    <!--</LinearLayout>-->
 </RelativeLayout>

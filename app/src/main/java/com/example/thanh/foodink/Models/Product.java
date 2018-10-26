@@ -1,8 +1,9 @@
 package com.example.thanh.foodink.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Product {
+public class Product implements Serializable{
     private int id;
     private String name;
     private String description;
@@ -11,6 +12,20 @@ public class Product {
     private ArrayList<String> images;
 
     public Product() {
+    }
+
+    public Product(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Product(int id, String name, String description, double rate, ArrayList<String> images) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.rate = rate;
+        this.images = images;
     }
 
     public Product(int id, String name, String description, double rate, ArrayList<Size> sizes, ArrayList<String> images) {
