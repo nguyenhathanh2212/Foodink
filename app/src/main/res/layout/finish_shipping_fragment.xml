@@ -1,0 +1,9 @@
+<Button android:id="@+id/btnFinishShipping"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Giao hàng thành công"
+    android:textColor="#fff"
+    android:padding="10dp"
+    android:textAllCaps="false"
+    android:background="@drawable/border_radius_purple_button"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -43,10 +43,10 @@ public class ShipperOrderListRecyclerAdapter extends RecyclerView.Adapter<Shippe
         ShipperOrder shipperOrder = listData.get(i);
         viewHolder.tvStoreName.setText(shipperOrder.getStoreName());
         viewHolder.tvReceiverName.setText(shipperOrder.getReceiverName());
-        viewHolder.tvShipCost.setText(shipperOrder.getShipCost() + "");
+        viewHolder.tvShipCost.setText(shipperOrder.getShipCost());
         viewHolder.tvOrderStatus.setText(shipperOrder.getOrderStatus());
 
-        if (shipperOrder.getOrderStatus().equals("Đang chuyển")) {
+        if (shipperOrder.getOrderStatus().equals("Đang vận chuyển")) {
             viewHolder.tvOrderStatus.setTextColor(Color.parseColor("#00f208"));
         }
 
@@ -66,13 +66,12 @@ public class ShipperOrderListRecyclerAdapter extends RecyclerView.Adapter<Shippe
             @Override
             public void onClickItem(View view, int position, boolean isLongClick) {
                 Intent intent = new Intent(view.getContext(), ShipperOrderDetailActivity.class);
-                intent.setAction(ShipperOrderDetailActivity.SHOW_ACTION);
+                intent.setAction(ShipperOrderDetailActivity.SHOW_RECEIVED_ORDER_ACTION);
                 intent.putExtra("SHIPPER_ORDER_ID", listData.get(position).getOrderID());
+                intent.putExtra("STORE_NAME", listData.get(position).getStoreName());
                 view.getContext().startActivity(intent);
             }
         });
-
-        
     }
 
     @Override
@@ -98,8 +97,7 @@ public class ShipperOrderListRecyclerAdapter extends RecyclerView.Adapter<Shippe
             itemView.setOnClickListener(this);
         }
 
-        public void setItemClickListener(ItemClickListener itemClickListener)
-        {
+        public void setItemClickListener(ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
@@ -110,6 +108,6 @@ public class ShipperOrderListRecyclerAdapter extends RecyclerView.Adapter<Shippe
     }
 
     public interface ItemClickListener {
-        void onClickItem(View view, int position,boolean isLongClick);
+        void onClickItem(View view, int position, boolean isLongClick);
     }
 }

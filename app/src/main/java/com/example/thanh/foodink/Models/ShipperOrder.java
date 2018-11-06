@@ -1,5 +1,7 @@
 package com.example.thanh.foodink.Models;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Vinh Nguyen on 11/1/2018.
  */
@@ -45,8 +47,10 @@ public class ShipperOrder {
         this.receiverName = receiverName;
     }
 
-    public float getShipCost() {
-        return shipCost;
+    public String getShipCost() {
+        DecimalFormat numberFormat = new DecimalFormat("##,###,### đ");
+
+        return numberFormat.format(shipCost);
     }
 
     public void setShipCost(float shipCost) {
@@ -55,7 +59,11 @@ public class ShipperOrder {
 
     public String getOrderStatus() {
         if (orderStatus.equals("shipping")) {
-            return "Đang chuyển";
+            return "Đang vận chuyển";
+        }
+
+        if (orderStatus.equals("done")) {
+            return "Hoàn thành";
         }
 
         return orderStatus;

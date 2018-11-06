@@ -13,9 +13,10 @@ public class User {
     private String address;
     private String avatar;
     private String authToken;
+    private int shipperId;
     public static final String AUTH = "UserAuthenticate";
 
-    public User(int id, String email, String name, String phone, String address, String avatar, String authToken) {
+    public User(int id, String email, String name, String phone, String address, String avatar, String authToken, int shipperId) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -23,6 +24,7 @@ public class User {
         this.address = address;
         this.avatar = avatar;
         this.authToken = authToken;
+        this.shipperId = shipperId;
     }
 
     public int getId() {
@@ -106,5 +108,13 @@ public class User {
     public static void logout(Context context) {
         SessionManager sessionManager = new SessionManager(context);
         sessionManager.forget(User.AUTH);
+    }
+
+    public int getShipperId() {
+        return shipperId;
+    }
+
+    public void setShipperId(int shipperId) {
+        this.shipperId = shipperId;
     }
 }

@@ -36,6 +36,7 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
 
     private int orderId;
     private int notificationId;
+    private String storeName;
 
     /**
      * Called when message is received.
@@ -163,7 +164,8 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setAction(actionName);
         intent.putExtra("NOTIFICATION_ID", notificationId);
-        intent.putExtra("SHIPPER_ORDER_ID", orderId);
+        intent.putExtra("ORDER_ID", orderId);
+        intent.putExtra("STORE_NAME", storeName);
 
         PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -180,6 +182,7 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
         String title = (String) data.get("title");
         orderId = Integer.parseInt((String) data.get("order_id"));
         notificationId = new Random().nextInt();
+        storeName = "abc";
 
         Intent acceptIntent = createIntent(ShipperOrderDetailActivity.ACCEPT_ACTION);
         Intent rejectIntent = createIntent(ShipperOrderDetailActivity.REJECT_ACTION);

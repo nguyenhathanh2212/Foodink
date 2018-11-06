@@ -1,0 +1,37 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
+
+    <Button
+        android:id="@+id/btnReject"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/reject"
+        android:drawableLeft="@android:drawable/sym_call_missed"
+        android:background="@drawable/border_radius_red_button"
+        android:textColor="#fff"
+        android:layout_marginRight="20dp"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btnAccept"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/accept"
+        android:drawableLeft="@android:drawable/sym_call_outgoing"
+        android:background="@drawable/border_radius_green_button"
+        android:textColor="#fff"
+        android:textAllCaps="false"/>
+</LinearLayout>
