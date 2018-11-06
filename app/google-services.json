@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "234722196285",
+    "firebase_url": "https://foodink-87056.firebaseio.com",
+    "project_id": "foodink-87056",
+    "storage_bucket": "foodink-87056.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234722196285:android:a35355bd2f5acd41",
+        "android_client_info": {
+          "package_name": "com.example.thanh.foodink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234722196285-09944borlsu4udl7miednrm90hfa1hs9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.thanh.foodink",
+            "certificate_hash": "7cc8b5de6bca0e644a0b55e9e07fbf9bd78582a2"
+          }
+        },
+        {
+          "client_id": "234722196285-1k9id21qepmnu3bdpf3deqiga6ad2smn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8KXVp1T2lKxYKLPGp_dU-nEGxX8HvVcU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234722196285-1k9id21qepmnu3bdpf3deqiga6ad2smn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 package com.example.thanh.foodink.Activities;
 
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.profile
     };
     private int currentFragment;
+    private static FragmentManager fragmentManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+        fragmentManager = getSupportFragmentManager();
         viewPager = findViewById(R.id.home_viewpager);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(new TabHomeAdapter(getSupportFragmentManager()));
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -51,5 +56,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(imageResId[1]);
         tabLayout.getTabAt(2).setIcon(imageResId[2]);
         tabLayout.getTabAt(3).setIcon(imageResId[3]);
+    }
+
+    public static FragmentManager getFragManager() {
+        return fragmentManager;
     }
 }

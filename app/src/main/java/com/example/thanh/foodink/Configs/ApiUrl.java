@@ -8,4 +8,5 @@ public interface ApiUrl {
     public static final String API_REGISTER = API_URL + "signup";
     public static final String API_STORES = "https://fudink.herokuapp.com/api/stores";
     public static final String API_CATEGORIES = "https://fudink.herokuapp.com/api/categories";
+    public static final String API_SHIPPER_ORDER_LIST = API_URL + "dashboard/shipper_orders";
 }
