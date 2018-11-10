@@ -18,4 +18,8 @@ public class Validation {
     public static boolean checkEmptyInput(EditText editText) {
         return editText.getText().toString().trim().equals("");
     }
+
+    public static boolean isPhoneNumber(String number) {
+        return Pattern.compile("^\\A0\\d{9,10}$").matcher(number).matches();
+    }
 }

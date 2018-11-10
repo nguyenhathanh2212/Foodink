@@ -1,6 +1,9 @@
 package com.example.thanh.foodink.Models;
 
-public class Size {
+import java.io.Serializable;
+import java.text.DecimalFormat;
+
+public class Size implements Serializable {
     private int id;
     private String size;
     private double price;

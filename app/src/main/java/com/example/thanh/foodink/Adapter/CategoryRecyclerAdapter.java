@@ -1,5 +1,7 @@
 package com.example.thanh.foodink.Adapter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.thanh.foodink.Activities.ProductCategoryActivity;
+import com.example.thanh.foodink.Activities.StoreActivity;
 import com.example.thanh.foodink.Models.Category;
 import com.example.thanh.foodink.R;
 import com.squareup.picasso.Picasso;
@@ -43,6 +47,17 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         } else {
             viewHolder.imageView.setImageResource(R.drawable.noimage);
         }
+
+        viewHolder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClickItem(View view, int position, boolean isLongClick) {
+                Intent intent = new Intent(view.getContext(), ProductCategoryActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("catedory_id", listData.get(position).getId());
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -50,14 +65,29 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         return listData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageView;
         private TextView txtName;
+        private ItemClickListener itemClickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img_item_category);
             txtName = itemView.findViewById(R.id.txt_item_name_category);
+            itemView.setOnClickListener(this);
         }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onClickItem(v, getAdapterPosition(), false);
+        }
+    }
+
+    public interface ItemClickListener {
+        void onClickItem(View view, int position,boolean isLongClick);
     }
 }

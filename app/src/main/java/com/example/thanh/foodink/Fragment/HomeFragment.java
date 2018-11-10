@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Fragment;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
@@ -20,12 +23,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.thanh.foodink.Activities.MainActivity;
+import com.example.thanh.foodink.Activities.StoresActivity;
 import com.example.thanh.foodink.Adapter.CategoryRecyclerAdapter;
 import com.example.thanh.foodink.Adapter.StoreRecyclerAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.Dialog.CheckConnectionDialog;
+import com.example.thanh.foodink.Helpers.CheckConnection;
 import com.example.thanh.foodink.Helpers.FontManager;
+import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Category;
 import com.example.thanh.foodink.Models.Store;
+import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 
 import org.json.JSONArray;
@@ -33,7 +42,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private RecyclerView categoryRecyclerView;
     private RecyclerView storeRecyclerView;
@@ -44,14 +53,21 @@ public class HomeFragment extends Fragment {
     private JsonObjectRequest objectRequest;
     private FragmentManager fragmentManager;
     private ApiUrl apiUrl;
+    private Button btnViewAllStores;
+    private Progresser progress;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.home_fragment, container, false);
         addControls();
+        addEvents();
 
         return rootView;
+    }
+
+    private void addEvents() {
+        btnViewAllStores.setOnClickListener(this);
     }
 
     private void addControls() {
@@ -65,18 +81,25 @@ public class HomeFragment extends Fragment {
 
         categoryRecyclerView = rootView.findViewById(R.id.recycler_category);
         storeRecyclerView = rootView.findViewById(R.id.recycler_store);
+        btnViewAllStores = rootView.findViewById(R.id.btn_more_store);
         categoryRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoryRecyclerView.setLayoutManager(linearLayoutManager);
         storeRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         requestQueue = Volley.newRequestQueue(this.getContext());
+        CheckConnection checkConnection = new CheckConnection(this.getContext());
 
-        showCategories();
+        if (checkConnection.isNetworkAvailable()) {
+            progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
 
-        showStores();
+            showCategories();
+
+            showStores();
+        }
     }
 
     private void showStores() {
+        progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 apiUrl.API_STORES,
@@ -85,6 +108,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            progress.hide();
                             JSONArray jsonArray = response.getJSONArray("stores");
 
                             ArrayList<Store> listData = new ArrayList<Store>();
@@ -106,7 +130,7 @@ public class HomeFragment extends Fragment {
                                 listData.add(new Store(id, name, description, locaion, imageUrls));
                             }
 
-                            storeAdapter = new StoreRecyclerAdapter(listData);
+                            storeAdapter = new StoreRecyclerAdapter(listData, R.layout.item_store);
                             storeRecyclerView.setAdapter(storeAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -116,7 +140,10 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RES", error.toString());
+                        progress.hide();
+                        Toast.makeText(getContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                        Log.d("ApiError", error.toString());
+                        error.printStackTrace();
                     }
                 }
         );
@@ -124,6 +151,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void showCategories() {
+        progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 apiUrl.API_CATEGORIES,
@@ -131,6 +159,7 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progress.hide();
                         try {
                             JSONArray jsonArray = response.getJSONArray("categories");
 
@@ -154,10 +183,21 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("RESs", error.toString());
+                        progress.hide();
+                        Toast.makeText(getContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                        Log.d("ApiError", error.toString());
+                        error.printStackTrace();
                     }
                 }
         );
         requestQueue.add(objectRequest);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == btnViewAllStores.getId()) {
+            Intent intent = new Intent(this.getContext(), StoresActivity.class);
+            startActivity(intent);
+        }
     }
 }

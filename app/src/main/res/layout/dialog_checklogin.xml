@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thông báo !"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#d9d9d9">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Hủy"
+            android:textColor="#4286f2"
+            android:id="@+id/btn_dialog_checklogin_cancel"
+            android:background="#fff"
+            android:textStyle="normal"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"/>
+        <Button
+            android:layout_marginTop="1dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập"
+            android:id="@+id/btn_dialog_checklogin_login"
+            android:textColor="#e63b3b"
+            android:background="#fff"
+            android:textStyle="normal"
+            android:textSize="12sp"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+</LinearLayout>

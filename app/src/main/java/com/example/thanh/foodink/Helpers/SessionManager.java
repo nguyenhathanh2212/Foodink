@@ -26,6 +26,10 @@ public class SessionManager {
         return sharedPreferences.getString(key, "");
     }
 
+    public boolean has(String key) {
+        return sharedPreferences.contains(key);
+    }
+
     public void forget(String key) {
         editor.remove(key);
         editor.apply();

@@ -23,6 +23,8 @@
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.StoreActivity" />
         <activity android:name=".Activities.ShipperOrderDetailActivity"></activity>
+        <activity android:name=".Activities.StoresActivity" />
+        <activity android:name=".Activities.ProductCategoryActivity"></activity>
 
         <service android:name=".Services.NotificationFirebaseMessagingService">
             <intent-filter>

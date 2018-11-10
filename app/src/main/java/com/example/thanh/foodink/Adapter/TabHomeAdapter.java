@@ -1,7 +1,6 @@
 package com.example.thanh.foodink.Adapter;
 
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -10,7 +9,6 @@ import com.example.thanh.foodink.Fragment.HomeFragment;
 import com.example.thanh.foodink.Fragment.NotificationFragment;
 import com.example.thanh.foodink.Fragment.OrderFragment;
 import com.example.thanh.foodink.Fragment.ProfileFragment;
-import com.example.thanh.foodink.R;
 
 import java.util.ArrayList;
 
@@ -21,14 +19,17 @@ public class TabHomeAdapter extends FragmentStatePagerAdapter {
 //    private ProfileFragment profileFragment;
 
     private ArrayList<Fragment> fragments;
+    private Context context;
 
-    public TabHomeAdapter(FragmentManager fragmentManager) {
+
+    public TabHomeAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
         fragments = new ArrayList<>();
         fragments.add(new HomeFragment());
         fragments.add(new OrderFragment());
         fragments.add(new NotificationFragment());
         fragments.add(new ProfileFragment());
+        this.context = context;
     }
 
     @Override
