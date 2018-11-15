@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.thanh.foodink.Activities.MainActivity;
@@ -17,11 +20,12 @@ import com.example.thanh.foodink.Adapter.TabHomeAdapter;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 
-public class NotificationFragment extends Fragment {
+public class NotificationFragment extends Fragment implements SwitchCompat.OnCheckedChangeListener {
     private View rootView;
     private TabLayout notificationTabLayout;
     private ViewPager notificationViewPager;
     private NotificationTabAdapter adapter;
+    private SwitchCompat swChangeShipperStatus;
 
     @Nullable
     @Override
@@ -38,6 +42,8 @@ public class NotificationFragment extends Fragment {
         adapter = new NotificationTabAdapter(MainActivity.getFragManager());
         notificationViewPager.setAdapter(adapter);
         notificationTabLayout.setupWithViewPager(notificationViewPager);
+        swChangeShipperStatus = (SwitchCompat) rootView.findViewById(R.id.swChangeShipperStatus);
+        swChangeShipperStatus.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -46,6 +52,17 @@ public class NotificationFragment extends Fragment {
 
         if (isVisibleToUser && User.checkUserAuth(getContext())) {
             mappingWidgets();
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView.getId() == R.id.swChangeShipperStatus) {
+            if (isChecked) {
+                Toast.makeText(getContext(), "On", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

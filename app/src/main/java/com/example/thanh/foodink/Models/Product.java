@@ -1,6 +1,7 @@
 package com.example.thanh.foodink.Models;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Product implements Serializable{
@@ -10,6 +11,13 @@ public class Product implements Serializable{
     private double rate;
     private ArrayList<Size> sizes;
     private ArrayList<String> images;
+
+//    attributes of shipper order products
+    private String size;
+    private String image;
+    private float price;
+    private String type;
+    private int quantity;
 
     public Product() {
     }
@@ -35,6 +43,15 @@ public class Product implements Serializable{
         this.rate = rate;
         this.sizes = sizes;
         this.images = images;
+    }
+
+    public Product(String name, String size, String image, int quantity, float price, String type) {
+        this.name = name;
+        this.image = image;
+        this.size = size;
+        this.price = price;
+        this.type = type;
+        this.quantity = quantity;
     }
 
     public int getId() {
@@ -83,5 +100,47 @@ public class Product implements Serializable{
 
     public void setImages(ArrayList<String> images) {
         this.images = (ArrayList<String>) images.clone();
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getPrice() {
+        DecimalFormat numberFormat = new DecimalFormat("##,###,### đ");
+
+        return numberFormat.format(price);
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

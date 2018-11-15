@@ -138,7 +138,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                             String address = userInfo.getString("address");
                             String avatar = userInfo.getString("avatar");
 
-                            User user = new User(id, email, name, phone, address, avatar, authToken);
+                            JSONObject shipper = userInfo.getJSONObject("shipper");
+                            int shipperId = (shipper != null) ? shipper.getInt("id") : 0;
+
+                            User user = new User(id, email, name, phone, address, avatar, authToken, shipperId);
                             User.setUserAuth(LoginActivity.this, user);
 
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();

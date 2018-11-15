@@ -1,5 +1,7 @@
 package com.example.thanh.foodink.Models;
 
+import java.text.DecimalFormat;
+
 public class Notification {
     private int orderID;
     private String storeName;
@@ -57,8 +59,10 @@ public class Notification {
         this.distanceToStore = distanceToStore;
     }
 
-    public float getShipCost() {
-        return shipCost;
+    public String getShipCost() {
+        DecimalFormat numberFormat = new DecimalFormat("##,###,### đ");
+
+        return numberFormat.format(shipCost);
     }
 
     public void setShipCost(float shipCost) {
