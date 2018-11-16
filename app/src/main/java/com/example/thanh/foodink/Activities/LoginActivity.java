@@ -2,6 +2,7 @@ package com.example.thanh.foodink.Activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -30,8 +31,15 @@ import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Helpers.Validation;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
     private TextView btnBack;
@@ -130,6 +138,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
                             JSONObject authInfo = response.getJSONObject("auth_token");
                             String authToken = authInfo.getString("token");
+                            String refreshToken = authInfo.getString("refresh_token");
+                            String expiredAt = authInfo.getString("expired_at");
                             JSONObject userInfo = authInfo.getJSONObject("user");
                             int id = userInfo.getInt("id");
                             String email = userInfo.getString("email");
@@ -141,8 +151,13 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                             JSONObject shipper = userInfo.getJSONObject("shipper");
                             int shipperId = (shipper != null) ? shipper.getInt("id") : 0;
 
-                            User user = new User(id, email, name, phone, address, avatar, authToken, shipperId);
+                            User user = new User(id, email, name, phone, address, avatar, authToken, refreshToken, expiredAt, shipperId);
                             User.setUserAuth(LoginActivity.this, user);
+
+
+                            if (shipperId > 0) {
+                                updateStatusShipper();
+                            }
 
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             finish();
@@ -210,6 +225,45 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         if (!Validation.isValidEmaillId(email)) {
             edtEmail.requestFocus();
             throw new ValidationException("Email phải hợp lệ");
+        }
+    }
+
+    private void updateStatusShipper() {
+        progress.show();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("device_token", FirebaseInstanceId.getInstance().getToken());
+
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    ApiUrl.API_CHANGE_SHIPPER_STATUS,
+                    params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            progress.hide();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progress.hide();
+                            Log.d("ApiError", error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+            ) {
+                public Map<String, String> getHeaders() {
+                    Map<String, String> mHeaders = new ArrayMap<String, String>();
+                    mHeaders.put("Authorization", User.getUserAuth(LoginActivity.this).getAuthToken());
+
+                    return mHeaders;
+                }
+            };
+
+            requestQueue.add(objectRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

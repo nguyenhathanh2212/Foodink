@@ -3,6 +3,7 @@ package com.example.thanh.foodink.Activities;
 import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,12 +17,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Adapter.TabHomeAdapter;
 import com.example.thanh.foodink.Broadcast.ManagerConnect;
+import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Dialog.CheckConnectionDialog;
 import com.example.thanh.foodink.Helpers.CheckConnection;
+import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private static FragmentManager fragmentManager;
     private ManagerConnect managerConnect;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +50,13 @@ public class MainActivity extends AppCompatActivity {
 //        managerConnect = new ManagerConnect();
 //        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 //        registerReceiver(managerConnect, filter);
-        addControls();
+
+        if (User.checkUserAuth(this) && User.getUserAuth(this).checkTokenExpire()) {
+            refreshLogin();
+        } else {
+            addControls();
+        }
+
     }
 
 //    @Override
@@ -80,5 +91,59 @@ public class MainActivity extends AppCompatActivity {
 
     public static FragmentManager getFragManager() {
         return fragmentManager;
+    }
+
+    public void refreshLogin() {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            JSONObject params = new JSONObject();
+            params.put("refresh_token", User.getUserAuth(this).getRefreshToken());
+
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.PATCH,
+                    ApiUrl.API_LOGIN_REFRESH,
+                    params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONObject authInfo = response.getJSONObject("auth_token");
+                                String authToken = authInfo.getString("token");
+                                String refreshToken = authInfo.getString("refresh_token");
+                                String expiredAt = authInfo.getString("expired_at");
+
+                                User user = User.getUserAuth(getApplicationContext());
+                                user.setAuthToken(authToken);
+                                user.setRefreshToken(refreshToken);
+                                user.setExpireAt(expiredAt);
+
+                                User.setUserAuth(getApplicationContext(), user);
+                                addControls();
+                            } catch (Exception e) {
+                                Log.d("ApiError", e.toString());
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("ApiError", error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+            ) {
+                public Map<String, String> getHeaders() {
+                    Map<String, String> mHeaders = new ArrayMap<String, String>();
+                    mHeaders.put("Authorization", User.getUserAuth(getApplicationContext()).getAuthToken());
+
+                    return mHeaders;
+                }
+            };
+
+            requestQueue.add(objectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
