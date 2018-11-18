@@ -46,6 +46,7 @@ public class OrderFragment extends Fragment {private ViewPager viewPager;
             addControls();
         }
     }
+
     private void addControls() {
         linearRequest = rootView.findViewById(R.id.request_screen);
 

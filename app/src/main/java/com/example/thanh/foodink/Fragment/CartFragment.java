@@ -125,8 +125,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                 ArrayList<String> imageUrls = new ArrayList<String>();
 
                                 for (int j = 0; j < jsonImageUrls.length(); j++) {
-                                    JSONArray imageArray = jsonImageUrls.getJSONArray(j);
-                                    String imageUrl = (String) imageArray.get(j);
+                                    String imageUrl = (String) jsonImageUrls.get(j);
                                     imageUrls.add(imageUrl);
                                 }
 

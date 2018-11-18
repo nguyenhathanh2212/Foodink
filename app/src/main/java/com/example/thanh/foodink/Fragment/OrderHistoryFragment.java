@@ -115,8 +115,7 @@ public class OrderHistoryFragment extends Fragment {
                                 ArrayList<String> imageStoreUrls = new ArrayList<String>();
 
                                 for (int j = 0; j < jsonImageStoreUrls.length(); j++) {
-                                    JSONArray imageArray = jsonImageStoreUrls.getJSONArray(j);
-                                    String imageUrl = (String) imageArray.get(j);
+                                    String imageUrl = (String) jsonImageStoreUrls.get(j);
                                     imageStoreUrls.add(imageUrl);
                                 }
                                 store = new Store(
@@ -140,8 +139,7 @@ public class OrderHistoryFragment extends Fragment {
                                     ArrayList<String> imageUrls = new ArrayList<String>();
 
                                     for (int k = 0; k < jsonImageUrls.length(); k++) {
-                                        JSONArray imageArray = jsonImageUrls.getJSONArray(k);
-                                        String imageUrl = (String) imageArray.get(k);
+                                        String imageUrl = (String) jsonImageUrls.get(k);
                                         imageUrls.add(imageUrl);
                                     }
 
