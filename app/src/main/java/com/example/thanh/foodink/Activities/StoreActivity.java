@@ -3,7 +3,7 @@ package com.example.thanh.foodink.Activities;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -29,12 +31,19 @@ import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Adapter.ProductRecycleAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Helpers.CheckConnection;
-import com.example.thanh.foodink.Helpers.FontManager;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Product;
 import com.example.thanh.foodink.Models.Size;
 import com.example.thanh.foodink.Models.Store;
 import com.example.thanh.foodink.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -54,10 +63,12 @@ public class StoreActivity extends AppCompatActivity {
     private JsonObjectRequest objectRequest;
     private ApiUrl apiUrl;
     private Progresser progress;
+    private static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fragmentManager = getSupportFragmentManager();
         CheckConnection checkConnection = new CheckConnection(getBaseContext());
 
         if (checkConnection.isNetworkAvailable()) {
@@ -97,6 +108,43 @@ public class StoreActivity extends AppCompatActivity {
 
         ArrayList<String> imageUrls = store.getImages();
         setFlipper(imageUrls);
+//        txtAddress.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Dialog dialog = new Dialog(StoreActivity.this);
+////                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+////                dialog.setCanceledOnTouchOutside(false);
+////                dialog.setCancelable(false);
+////                dialog.setContentView(R.layout.activity_maps);
+////                Window w = dialog.getWindow();
+////                w.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//
+//
+//                dialog.setContentView(R.layout.activity_maps);
+//                SupportMapFragment supportMapFragment =
+//                        (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//                supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+//                    @Override
+//                    public void onMapReady(GoogleMap googleMap) {
+//                        final GoogleMap mGoogleMap;
+//                        mGoogleMap = googleMap;
+//                        mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+//                            @Override
+//                            public void onMapLoaded() {
+//                                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//                                mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+//                            }
+//                        });
+//                        LatLng framgiaVietnam = new LatLng(21.0166458, 105.7841248);
+//                        mGoogleMap
+//                                .addMarker(
+//                                        new MarkerOptions().position(framgiaVietnam).title("Framgia Vietnam"));
+//                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(framgiaVietnam, 18));
+//                    }
+//                });
+//                dialog.show();
+//            }
+//        });
     }
 
     private void getDrinkProduct(int id) {
@@ -135,8 +183,7 @@ public class StoreActivity extends AppCompatActivity {
                                 ArrayList<String> imageUrls = new ArrayList<String>();
 
                                 for (int j = 0; j < jsonImageUrls.length(); j++) {
-                                    JSONArray imageArray = jsonImageUrls.getJSONArray(j);
-                                    String imageUrl = (String) imageArray.get(j);
+                                    String imageUrl = (String) jsonImageUrls.get(j);
                                     imageUrls.add(imageUrl);
                                 }
 
@@ -197,8 +244,7 @@ public class StoreActivity extends AppCompatActivity {
                                 ArrayList<String> imageUrls = new ArrayList<String>();
 
                                 for (int j = 0; j < jsonImageUrls.length(); j++) {
-                                    JSONArray imageArray = jsonImageUrls.getJSONArray(j);
-                                    String imageUrl = (String) imageArray.get(j);
+                                    String imageUrl = (String) jsonImageUrls.get(j);
                                     imageUrls.add(imageUrl);
                                 }
 
@@ -284,5 +330,9 @@ public class StoreActivity extends AppCompatActivity {
                 viewFlipper.stopFlipping();
             }
         }
+    }
+
+    public static FragmentManager getFragManager() {
+        return fragmentManager;
     }
 }

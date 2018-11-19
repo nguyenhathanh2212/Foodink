@@ -1,5 +1,7 @@
 package com.example.thanh.foodink.Activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +24,7 @@ import com.example.thanh.foodink.Dialog.CheckConnectionDialog;
 import com.example.thanh.foodink.Helpers.CheckConnection;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.example.thanh.foodink.Services.UpdateLocationService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,12 +44,14 @@ public class MainActivity extends AppCompatActivity {
     };
     private int currentFragment;
     private static FragmentManager fragmentManager;
+    private static Context mainContext;
     private ManagerConnect managerConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainContext = MainActivity.this;
 //        managerConnect = new ManagerConnect();
 //        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 //        registerReceiver(managerConnect, filter);
@@ -74,11 +79,30 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         this.setTabIcon();
         CheckConnection checkConnection = new CheckConnection(getBaseContext());
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         if (checkConnection.isNetworkAvailable() == false) {
             CheckConnectionDialog checkConnectionDialog = new CheckConnectionDialog();
             checkConnectionDialog.show(this.getSupportFragmentManager(), "");
         }
+
+        Intent intent = new Intent(this, UpdateLocationService.class);
+        startService(intent);
     }
 
     private void setTabIcon() {
@@ -91,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static FragmentManager getFragManager() {
         return fragmentManager;
+    }
+    public static Context getMainContext() {
+        return mainContext;
     }
 
     public void refreshLogin() {

@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,6 +55,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductDialog extends DialogFragment implements View.OnClickListener {
+    private View rootView;
     private ImageView imgProduct;
     private TextView txtName, txtDescription, txtNumber;
     private Button btnAddCart;
@@ -78,7 +80,13 @@ public class ProductDialog extends DialogFragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_detail, container);
+        rootView = inflater.inflate(R.layout.dialog_detail, container);
+//        Window window = this.getDialog().getWindow();
+//        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+//        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        window.setGravity(Gravity.BOTTOM);
+
+        return rootView;
     }
 
     @Override

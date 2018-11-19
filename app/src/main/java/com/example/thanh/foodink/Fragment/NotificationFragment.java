@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Fragment;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Notification;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.example.thanh.foodink.Services.UpdateLocationService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
@@ -189,6 +191,7 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
 
                                 if (isSuccess) {
                                     imgShipperStatus.setImageResource(R.drawable.shipper_online);
+                                    getActivity().startService(new Intent(getActivity(), UpdateLocationService.class));
                                     Toast.makeText(getContext(), "Thay đổi trạng thái thành công", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getContext(), "Thay đổi trạng thái thất bại", Toast.LENGTH_SHORT).show();
@@ -245,6 +248,7 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
 
                                 if (isSuccess) {
                                     imgShipperStatus.setImageResource(R.drawable.shipper_offline);
+                                    getActivity().stopService(new Intent(getActivity(), UpdateLocationService.class));
                                     Toast.makeText(getContext(), "Thay đổi trạng thái thành công", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getContext(), "Thay đổi trạng thái thất bại", Toast.LENGTH_SHORT).show();
