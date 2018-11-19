@@ -19,7 +19,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Không thể tải dữ liệu"
         android:textColor="#000"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -29,7 +28,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bạn chưa đăng nhập, vui lòng đăng nhập để xem giỏ hàng"
         android:textSize="14sp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"

@@ -10,8 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Adapter.OrderTabAdapter;
@@ -54,6 +56,10 @@ public class OrderFragment extends Fragment {private ViewPager viewPager;
             tabLayout = rootView.findViewById(R.id.order_tab_layout);
             tabLayout.setupWithViewPager(viewPager);
         } else {
+            TextView tvTitle = (TextView) rootView.findViewById(R.id.txt_title);
+            TextView tvMsg = (TextView) rootView.findViewById(R.id.txt_msg);
+            tvTitle.setText("Không thể tải dữ liệu");
+            tvMsg.setText("Bạn chưa đăng nhập, vui lòng đăng nhập để xem giỏ hàng");
             linearRequest.setVisibility(LinearLayout.VISIBLE);
         }
     }
