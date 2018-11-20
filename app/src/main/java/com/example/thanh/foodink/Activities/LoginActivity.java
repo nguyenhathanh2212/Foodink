@@ -148,8 +148,14 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                             String address = userInfo.getString("address");
                             String avatar = userInfo.getString("avatar");
 
-                            JSONObject shipper = userInfo.getJSONObject("shipper");
-                            int shipperId = (shipper != null) ? shipper.getInt("id") : 0;
+                            JSONObject role = userInfo.getJSONObject("role");
+                            String roleName = role.getString("name");
+                            int shipperId = 0;
+
+                            if (roleName.equals("Shipper")) {
+                                JSONObject shipper = userInfo.getJSONObject("shipper");
+                                shipperId = shipper.getInt("id");
+                            }
 
                             User user = new User(id, email, name, phone, address, avatar, authToken, refreshToken, expiredAt, shipperId);
                             User.setUserAuth(LoginActivity.this, user);
