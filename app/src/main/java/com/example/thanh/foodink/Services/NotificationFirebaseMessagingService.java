@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.text.Html;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,14 +20,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Activities.ShipperOrderDetailActivity;
+import com.example.thanh.foodink.Helpers.SessionManager;
 import com.example.thanh.foodink.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -34,9 +42,8 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
 
     private static final String TAG = "FirebaseMsgService";
 
-    private int orderId;
+    private com.example.thanh.foodink.Models.Notification notification;
     private int notificationId;
-    private String storeName;
 
     /**
      * Called when message is received.
@@ -95,7 +102,7 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token);
+//        sendRegistrationToServer(token);
     }
     // [END on_new_token]
 
@@ -164,8 +171,8 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setAction(actionName);
         intent.putExtra("NOTIFICATION_ID", notificationId);
-        intent.putExtra("ORDER_ID", orderId);
-        intent.putExtra("STORE_NAME", storeName);
+        intent.putExtra("ORDER_ID", notification.getOrderID());
+        intent.putExtra("STORE_NAME", notification.getStoreName());
 
         PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -178,52 +185,75 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
      * @param data FCM message body received.
      */
     private void sendNotification(Map data) {
-        String content = (String) data.get("content");
-        String title = (String) data.get("title");
-        orderId = Integer.parseInt((String) data.get("order_id"));
-        notificationId = new Random().nextInt();
-        storeName = "abc";
+        try {
+            int orderId = Integer.parseInt((String) data.get("order_id"));
+            String storeName = (String) data.get("store_name");
+            String storeAddress = (String) data.get("store_address");
+            float distanceToStore = Float.parseFloat((String) data.get("distance"));
+            float shipCost = Float.parseFloat((String) data.get("ship_cost"));
+            String storeImg = (String) data.get("store_image");
 
-        Intent acceptIntent = createIntent(ShipperOrderDetailActivity.ACCEPT_ACTION);
-        Intent rejectIntent = createIntent(ShipperOrderDetailActivity.REJECT_ACTION);
-        Intent intent = createIntent(ShipperOrderDetailActivity.SHOW_ACTION);
+            notification = new com.example.thanh.foodink.Models.Notification(orderId, storeName, storeAddress, storeImg, distanceToStore, shipCost);
+            notificationId = new Random().nextInt();
+            String title = "Bạn có một đơn hàng từ " + notification.getStoreName();
+            String message = "Địa chỉ: " + notification.getStoreAddress() + "\nTiền ship: " + notification.getShipCost() + "\nKhoảng cách: " + notification.getDistanceToStore() + " m";
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            SessionManager sessionManager = new SessionManager(getApplicationContext());
+            String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
+            ArrayList<com.example.thanh.foodink.Models.Notification> nofiticationList = new ArrayList<>();
+            Gson gson = new Gson();
 
-        String channelId = getString(R.string.project_id);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-            new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(title)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .addAction(new NotificationCompat.Action(
-                    android.R.drawable.sym_call_missed,
-                    getString(R.string.reject),
-                    PendingIntent.getActivity(this, 0, rejectIntent, PendingIntent.FLAG_CANCEL_CURRENT)))
-                .addAction(new NotificationCompat.Action(
-                    android.R.drawable.sym_call_outgoing,
-                    getString(R.string.accept),
-                    PendingIntent.getActivity(this, 0, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT)));
+            if (!notificationsJson.equals("")) {
+                Type type = new TypeToken<ArrayList<com.example.thanh.foodink.Models.Notification>>() {}.getType();
+                nofiticationList = gson.fromJson(notificationsJson, type);
+            }
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            nofiticationList.add(notification);
+            sessionManager.set("NOTIFICATION_LIST", gson.toJson(nofiticationList));
 
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT);
+            Intent acceptIntent = createIntent(ShipperOrderDetailActivity.ACCEPT_ACTION);
+            Intent rejectIntent = createIntent(ShipperOrderDetailActivity.REJECT_ACTION);
+            Intent intent = createIntent(ShipperOrderDetailActivity.SHOW_ACTION);
 
-            notificationManager.createNotificationChannel(channel);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+            String channelId = getString(R.string.project_id);
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this, channelId)
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                            .setContentTitle(title)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                            .setAutoCancel(true)
+                            .setSound(defaultSoundUri)
+                            .setContentIntent(pendingIntent)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                            .addAction(new NotificationCompat.Action(
+                                    android.R.drawable.sym_call_missed,
+                                    getString(R.string.reject),
+                                    PendingIntent.getActivity(this, 0, rejectIntent, PendingIntent.FLAG_CANCEL_CURRENT)))
+                            .addAction(new NotificationCompat.Action(
+                                    android.R.drawable.sym_call_outgoing,
+                                    getString(R.string.accept),
+                                    PendingIntent.getActivity(this, 0, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT)));
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            // Since android Oreo notification channel is needed.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(
+                        channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_DEFAULT);
+
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            notificationManager.notify(notificationId, notificationBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 }
