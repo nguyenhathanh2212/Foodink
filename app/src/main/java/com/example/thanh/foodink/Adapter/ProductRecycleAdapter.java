@@ -1,38 +1,21 @@
 package com.example.thanh.foodink.Adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.example.thanh.foodink.Activities.StoreActivity;
 import com.example.thanh.foodink.Dialog.ProductDialog;
-import com.example.thanh.foodink.Fragment.ProfileFragment;
-import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Product;
-import com.example.thanh.foodink.Models.Size;
 import com.example.thanh.foodink.R;
 import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAdapter.ItemViewHolder> {
@@ -66,9 +49,9 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
             itemViewHolder.imageViewStar = new ImageView(context);
 
             if (star < rate) {
-                itemViewHolder.imageViewStar.setImageResource(R.drawable.start_blue);
+                itemViewHolder.imageViewStar.setImageResource(R.drawable.star_yellow);
             } else {
-                itemViewHolder.imageViewStar.setImageResource(R.drawable.start_gray);
+                itemViewHolder.imageViewStar.setImageResource(R.drawable.star_gray);
             }
 
             itemViewHolder.imageViewStar.setScaleType(ImageView.ScaleType.CENTER_CROP);

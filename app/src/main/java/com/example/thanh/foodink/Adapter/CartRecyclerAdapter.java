@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,12 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,14 +65,18 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         cartViewHolder.txtPrice.setText(formatter.format(listData.get(i).getSize().getPrice() * listData.get(i).getQuantity()) + "đ");
         ArrayList<String> imageUrls = listData.get(i).getProduct().getImages();
 
-        if (imageUrls.size() == 0 || imageUrls.get(0).equals("")) {
-            cartViewHolder.imageView.setImageResource(R.drawable.noimage);
-        } else {
-            Picasso.get()
-                    .load(imageUrls.get(0))
-                    .placeholder(R.drawable.loader)
-                    .error(R.drawable.noimage)
-                    .into(cartViewHolder.imageView);
+        try {
+            if (imageUrls.size() == 0 || imageUrls.get(0).equals("")) {
+                cartViewHolder.imageView.setImageResource(R.drawable.noimage);
+            } else {
+                Picasso.get()
+                        .load(imageUrls.get(0))
+                        .placeholder(R.drawable.loader)
+                        .error(R.drawable.noimage)
+                        .into(cartViewHolder.imageView);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         cartViewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +194,9 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
                     imageViewStar = new ImageView(view.getContext());
 
                     if (star < rate) {
-                        imageViewStar.setImageResource(R.drawable.start_blue);
+                        imageViewStar.setImageResource(R.drawable.star_yellow);
                     } else {
-                        imageViewStar.setImageResource(R.drawable.start_gray);
+                        imageViewStar.setImageResource(R.drawable.star_gray);
                     }
 
                     imageViewStar.setScaleType(ImageView.ScaleType.CENTER_CROP);

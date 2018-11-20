@@ -7,7 +7,8 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:background="#fff"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:id="@+id/scroll_view">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -42,12 +43,20 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:text="Map"
-                android:gravity="center"
-                android:layout_marginBottom="20dp"/>
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:id="@+id/layout_map"
+                android:elevation="1000dp">
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.example.thanh.foodink.CustomMap.WorkaroundMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/orderInfoFragment"

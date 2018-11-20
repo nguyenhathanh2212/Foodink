@@ -1,16 +1,24 @@
 package com.example.thanh.foodink.Activities;
 
+import android.Manifest;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,17 +29,28 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.CustomMap.WorkaroundMapFragment;
 import com.example.thanh.foodink.Fragment.OrderDetailFragment;
 import com.example.thanh.foodink.Fragment.ShipperOrderReceivedRejectFragment;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
-public class ShipperOrderDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShipperOrderDetailActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     public static final String ACCEPT_ACTION = "Accept";
     public static final String REJECT_ACTION = "Reject";
     public static final String SHOW_ACTION = "Show";
@@ -41,6 +60,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
     private Intent intent;
     private RequestQueue requestQueue;
     private Progresser progress;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +70,17 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
         if (!User.checkUserAuth(this)) {
             finish();
         }
+
+        final ScrollView scrollView = findViewById(R.id.scroll_view);
+        WorkaroundMapFragment mapFragment = (WorkaroundMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.setListener(new WorkaroundMapFragment.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+            }
+        });
+        mapFragment.getMapAsync(this);
 
         mappingWidgets();
         hideNotification();
@@ -284,5 +315,107 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                 rejectOrder();
                 break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        progress.show();
+        try {
+            int orderID = intent.getIntExtra("SHIPPER_ORDER_ID", 0);
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    ApiUrl.API_ORDER + "/" + orderID,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            progress.hide();
+                            try {
+                                boolean isSuccess = response.getBoolean("success");
+                                if (isSuccess) {
+                                    double longitudeStore = response.getJSONObject("store").getDouble("longitude");
+                                    double latitudeStore = response.getJSONObject("store").getDouble("latitude");
+                                    String addressCustomer = response.getJSONObject("order").getString("address");
+                                    LatLng locationCustomer = getLocationFromAddress(getBaseContext(), addressCustomer);
+                                    LatLng locationStore = new LatLng(latitudeStore, longitudeStore);
+                                    UiSettings uiSettings = mMap.getUiSettings();
+                                    if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        return;
+                                    }
+                                    mMap.setMyLocationEnabled(true);
+                                    uiSettings.setZoomGesturesEnabled(true);
+                                    uiSettings.setZoomControlsEnabled(true);
+                                    uiSettings.setCompassEnabled(true);
+                                    uiSettings.setMapToolbarEnabled(true);
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(locationStore)
+                                            .title("Cửa hàng")
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(locationCustomer)
+                                            .title("Khách hàng")
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                    LatLng moveCamera = new LatLng((latitudeStore + locationCustomer.latitude) / 2,
+                                            (longitudeStore + locationCustomer.longitude) / 2);
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(moveCamera, 13.2f));
+                                }
+                            } catch (Exception e) {
+                                Log.d("ApiError", e.toString());
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progress.hide();
+                            Log.d("ApiError", error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+            ) {
+                public Map<String, String> getHeaders() {
+                    Map<String, String> mHeaders = new ArrayMap<String, String>();
+                    mHeaders.put("Authorization", User.getUserAuth(getApplicationContext()).getAuthToken());
+
+                    return mHeaders;
+                }
+            };
+
+            requestQueue.add(objectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return p1;
     }
 }

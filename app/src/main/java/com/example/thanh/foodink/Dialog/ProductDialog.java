@@ -2,24 +2,16 @@ package com.example.thanh.foodink.Dialog;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,7 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Activities.LoginActivity;
-import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Helpers.SessionManager;
@@ -153,9 +144,9 @@ public class ProductDialog extends DialogFragment implements View.OnClickListene
             imageViewStar = new ImageView(this.getContext());
 
             if (star < rate) {
-                imageViewStar.setImageResource(R.drawable.start_blue);
+                imageViewStar.setImageResource(R.drawable.star_yellow);
             } else {
-                imageViewStar.setImageResource(R.drawable.start_gray);
+                imageViewStar.setImageResource(R.drawable.star_gray);
             }
 
             imageViewStar.setScaleType(ImageView.ScaleType.CENTER_CROP);

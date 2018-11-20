@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Fragment;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,6 +32,7 @@ import com.example.thanh.foodink.Helpers.FontManager;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.example.thanh.foodink.Services.UpdateLocationService;
 
 import org.json.JSONObject;
 
@@ -45,6 +48,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private RequestQueue requestQueue;
     private Progresser progress;
+
+    private TextView txtPhone, txtAddress, txtEmail;
+    private LinearLayout requestLogin;
 
     @Nullable
     @Override
@@ -62,6 +68,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         FontManager.markAsIconContainer(rootView.findViewById(R.id.profileViewLayout), iconFont);
         logoutLayout = (LinearLayout) rootView.findViewById(R.id.logoutLayout);
         requestQueue = Volley.newRequestQueue(getContext());
+        txtAddress = rootView.findViewById(R.id.address);
+        txtEmail = rootView.findViewById(R.id.email);
+        txtPhone = rootView.findViewById(R.id.phone);
+        requestLogin = rootView.findViewById(R.id.request_screen);
 
         progress = new Progresser(getContext(), "Đăng xuất", "Đang đăng xuất...");
     }
@@ -92,11 +102,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             btnLogout = (RelativeLayout) rootView.findViewById(R.id.btnLogout);
             btnLogout.setOnClickListener(this);
+            txtPhone.setText(User.getUserAuth(getContext()).getPhone() + "");
+            txtEmail.setText(User.getUserAuth(getContext()).getEmail() + "");
+            txtAddress.setText(User.getUserAuth(getContext()).getAddress() + "");
+            requestLogin.setVisibility(LinearLayout.INVISIBLE);
         } else {
             logoutLayout.removeAllViews();
             ft_rep.replace(R.id.headerLayout, new LoginFragment());
             ft_rep = ft_rep.addToBackStack(null);
             ft_rep.commitAllowingStateLoss();
+            requestLogin.setVisibility(LinearLayout.VISIBLE);
         }
     }
 
@@ -117,6 +132,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         progress.hide();
+                        getActivity().stopService(new Intent(getActivity(), UpdateLocationService.class));
                         User.logout(getContext());
                         showUserHeaderLayout();
                         Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
