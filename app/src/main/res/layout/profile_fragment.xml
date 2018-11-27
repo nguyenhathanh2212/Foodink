@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -43,126 +44,143 @@
             android:background="#000"
             android:orientation="vertical">
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/login_request"/>
 
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:background="#ebebeb"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:id="@+id/userActionLayout"
+            <ScrollView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@drawable/border_item_profile">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-                        <ImageView
-                            android:src="@drawable/maps_icon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Địa chỉ"
-                            android:paddingLeft="15dp"
-                            android:textColor="#333"
-                            android:textSize="14dp"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fa_angle_right"
-                        android:layout_alignParentRight="true"
-                        android:textSize="20dp"
-                        android:paddingTop="3dp"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@drawable/border_bottom_item_profile">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-                        <ImageView
-                            android:src="@drawable/maps_icon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Địa chỉ"
-                            android:paddingLeft="15dp"
-                            android:textColor="#333"
-                            android:textSize="14dp"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fa_angle_right"
-                        android:layout_alignParentRight="true"
-                        android:textSize="20dp"
-                        android:paddingTop="3dp"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@drawable/border_bottom_item_profile">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-                        <ImageView
-                            android:src="@drawable/maps_icon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Địa chỉ"
-                            android:paddingLeft="15dp"
-                            android:textColor="#333"
-                            android:textSize="14dp"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fa_angle_right"
-                        android:layout_alignParentRight="true"
-                        android:textSize="20dp"
-                        android:paddingTop="3dp"/>
-                </RelativeLayout>
-
+                android:layout_height="match_parent"
+                android:background="#ebebeb"
+                android:fillViewport="true"
+                android:elevation="1dp">
                 <LinearLayout
-                    android:id="@+id/logoutLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/userActionLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     android:orientation="vertical"
-                    android:layout_marginTop="15dp"></LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:elevation="1dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:background="@drawable/border_item_profile">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/icon_phone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:id="@+id/phone"
+                                android:paddingLeft="15dp"
+                                android:textColor="#333"
+                                android:textSize="14dp"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fa_angle_right"
+                            android:layout_alignParentRight="true"
+                            android:textSize="20dp"
+                            android:paddingTop="3dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:background="@drawable/border_bottom_item_profile">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/google_plus_icon"
+                                app:srcCompat="@drawable/gmail"
+                                android:padding="2dp"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:id="@+id/email"
+                                android:paddingLeft="15dp"
+                                android:textColor="#333"
+                                android:textSize="14dp"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fa_angle_right"
+                            android:layout_alignParentRight="true"
+                            android:textSize="20dp"
+                            android:paddingTop="3dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:background="@drawable/border_bottom_item_profile">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+                            <ImageView
+                                android:src="@drawable/maps_icon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:scaleType="fitCenter"
+                                android:padding="3dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:id="@+id/address"
+                                android:paddingLeft="15dp"
+                                android:textColor="#333"
+                                android:textSize="14dp"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fa_angle_right"
+                            android:layout_alignParentRight="true"
+                            android:textSize="20dp"
+                            android:paddingTop="3dp"/>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/logoutLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"></LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

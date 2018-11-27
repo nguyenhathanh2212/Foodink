@@ -14,4 +14,5 @@ public interface ApiUrl {
     public static final String API_ORDERS = "https://fudink.herokuapp.com/api/orders";
     public static final String API_CHANGE_SHIPPER_STATUS = API_URL + "dashboard/devices";
     public static final String API_SHIPPER = API_URL + "dashboard/shippers";
+    public static final String API_ORDER = API_URL + "orders";
 }

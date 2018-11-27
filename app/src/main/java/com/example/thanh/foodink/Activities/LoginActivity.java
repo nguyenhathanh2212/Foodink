@@ -31,6 +31,7 @@ import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Helpers.Validation;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
+import com.example.thanh.foodink.Services.UpdateLocationService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -247,6 +248,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            startService(new Intent(getBaseContext(), UpdateLocationService.class));
                             progress.hide();
                         }
                     },
