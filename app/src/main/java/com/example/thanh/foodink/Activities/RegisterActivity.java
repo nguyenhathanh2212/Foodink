@@ -195,9 +195,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             throw new ValidationException("Mật khẩu không được để trống");
         }
 
-        if (name.length() < 6) {
+        if (name.length() < 6 || name.length() > 255) {
             edtName.requestFocus();
-            throw new ValidationException("Tên phải có ít nhất 6 kí tự trở lên");
+            throw new ValidationException("Tên phải có độ dài trong khoảng 6-255 ký tự");
         }
 
         if (!Validation.isValidEmaillId(email)) {
@@ -205,9 +205,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             throw new ValidationException("Email phải hợp lệ");
         }
 
-        if (password.length() < 6) {
+        if (email.length() < 6 || email.length() > 255) {
+            edtEmail.requestFocus();
+            throw new ValidationException("Email phải có độ dài trong khoảng 6-255 ký tự");
+        }
+
+        if (password.length() < 6 || password.length() > 255) {
             edtPassword.requestFocus();
-            throw new ValidationException("Mật khẩu phải có ít nhất 6 kí tự trở lên");
+            throw new ValidationException("Mật khẩu phải có độ dài trong khoảng 6-255 ký tự");
         }
 
         if (!password.equals(passwordConfirm)) {

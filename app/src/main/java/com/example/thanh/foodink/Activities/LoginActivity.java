@@ -233,6 +233,16 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             edtEmail.requestFocus();
             throw new ValidationException("Email phải hợp lệ");
         }
+
+        if (email.length() < 6 || email.length() > 255) {
+            edtEmail.requestFocus();
+            throw new ValidationException("Email phải có độ dài trong khoảng 6-255 ký tự");
+        }
+
+        if (password.length() < 6 || password.length() > 255) {
+            edtPassword.requestFocus();
+            throw new ValidationException("Mật khẩu phải có độ dài trong khoảng 6-255 ký tự");
+        }
     }
 
     private void updateStatusShipper() {

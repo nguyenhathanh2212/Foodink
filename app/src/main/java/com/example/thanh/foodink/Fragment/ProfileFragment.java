@@ -33,6 +33,7 @@ import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 import com.example.thanh.foodink.Services.UpdateLocationService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -132,6 +133,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         progress.hide();
+
+                        if (User.getUserAuth(getContext()).getShipperId() > 0) {
+                            updateStatusShipper();
+                        }
+
                         getActivity().stopService(new Intent(getActivity(), UpdateLocationService.class));
                         User.logout(getContext());
                         showUserHeaderLayout();
@@ -157,5 +163,41 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         };
 
         requestQueue.add(objectRequest);
+    }
+
+    private void updateStatusShipper() {
+        try {
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.DELETE,
+                    ApiUrl.API_CHANGE_SHIPPER_STATUS + "/" + deviceToken,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("ApiError", error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+            ) {
+                public Map<String, String> getHeaders() {
+                    Map<String, String> mHeaders = new ArrayMap<String, String>();
+                    mHeaders.put("Authorization", User.getUserAuth(getContext()).getAuthToken());
+
+                    return mHeaders;
+                }
+            };
+
+            requestQueue.add(objectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
