@@ -3,7 +3,10 @@ package com.example.thanh.foodink.Activities;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,26 +67,69 @@ public class StoreActivity extends AppCompatActivity {
     private ApiUrl apiUrl;
     private Progresser progress;
     private static FragmentManager fragmentManager;
+    private CheckConnection checkConnection;
+    private ArrayList<String> imageUrls;
+    private ArrayList<Product> listDrinkData;
+    private ArrayList<Product> listFoodData;
+    private Store store;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayoutFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
-        CheckConnection checkConnection = new CheckConnection(getBaseContext());
+        setContentView(R.layout.activity_store);
+        addControls();
+        addEvents();
+    }
 
-        if (checkConnection.isNetworkAvailable()) {
-            setContentView(R.layout.activity_store);
+    private void addEvents() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        try {
+                            if (checkConnection.isNetworkAvailable()) {
+                                listDrinkData.clear();
+                                getDrinkProduct(store.getId());
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                            }
 
-            addControls();
-        } else {
-            setContentView(R.layout.login_request);
-        }
+                            swipeRefreshLayout.setRefreshing(false);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                }
+        );
+        swipeRefreshLayoutFood.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        try {
+                            if (checkConnection.isNetworkAvailable()) {
+                                listFoodData.clear();
+                                getFoodProduct(store.getId());
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            swipeRefreshLayoutFood.setRefreshing(false);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
         Bundle bundle = getIntent().getExtras();
-        Store store = (Store) bundle.getSerializable("store");
+        store = (Store) bundle.getSerializable("store");
         txtName = findViewById(R.id.txt_name_store);
         txtAddress = findViewById(R.id.txt_address_store);
         txtDescription = findViewById(R.id.txt_desciption_store);
@@ -101,50 +147,35 @@ public class StoreActivity extends AppCompatActivity {
         drinkRecyclerView.setLayoutManager(drinkLayoutManager);
         requestQueue = Volley.newRequestQueue(this);
         progress = new Progresser(this, "", "Đang load dữ liệu...");
-
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        swipeRefreshLayoutFood = findViewById(R.id.swiperefresh2);
         setTabHost();
-        getDrinkProduct(store.getId());
-        getFoodProduct(store.getId());
+        listDrinkData = new ArrayList<Product>();
+        drinkRecycleAdapter = new ProductRecycleAdapter(listDrinkData, getApplicationContext(), getSupportFragmentManager());
+        drinkRecyclerView.setAdapter(drinkRecycleAdapter);
+        listFoodData = new ArrayList<Product>();
+        foodRecycleAdapter = new ProductRecycleAdapter(listFoodData, getApplicationContext(), getSupportFragmentManager());
+        foodRecyclerView.setAdapter(foodRecycleAdapter);
 
-        ArrayList<String> imageUrls = store.getImages();
-        setFlipper(imageUrls);
-//        txtAddress.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Dialog dialog = new Dialog(StoreActivity.this);
-////                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-////                dialog.setCanceledOnTouchOutside(false);
-////                dialog.setCancelable(false);
-////                dialog.setContentView(R.layout.activity_maps);
-////                Window w = dialog.getWindow();
-////                w.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//
-//
-//                dialog.setContentView(R.layout.activity_maps);
-//                SupportMapFragment supportMapFragment =
-//                        (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-//                supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-//                    @Override
-//                    public void onMapReady(GoogleMap googleMap) {
-//                        final GoogleMap mGoogleMap;
-//                        mGoogleMap = googleMap;
-//                        mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-//                            @Override
-//                            public void onMapLoaded() {
-//                                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//                                mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-//                            }
-//                        });
-//                        LatLng framgiaVietnam = new LatLng(21.0166458, 105.7841248);
-//                        mGoogleMap
-//                                .addMarker(
-//                                        new MarkerOptions().position(framgiaVietnam).title("Framgia Vietnam"));
-//                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(framgiaVietnam, 18));
-//                    }
-//                });
-//                dialog.show();
-//            }
-//        });
+        checkConnection = new CheckConnection(getBaseContext());
+
+        if (checkConnection.isNetworkAvailable()) {
+            getDrinkProduct(store.getId());
+            tabHostStore.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+                @Override
+                public void onTabChanged(String tabId) {
+                    if (tabId.equals("tabFood") && listFoodData.isEmpty()) {
+                        getFoodProduct(store.getId());
+                    }
+                }
+            });
+
+            imageUrls = store.getImages();
+            setFlipper(imageUrls);
+        } else {
+            Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void getDrinkProduct(int id) {
@@ -160,7 +191,6 @@ public class StoreActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONObject("drink").getJSONArray("products");
 
-                            ArrayList<Product> listData = new ArrayList<Product>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
@@ -187,10 +217,9 @@ public class StoreActivity extends AppCompatActivity {
                                     imageUrls.add(imageUrl);
                                 }
 
-                                listData.add(new Product(id, name, description, rate, sizes, imageUrls));
+                                listDrinkData.add(new Product(id, name, description, rate, sizes, imageUrls));
                             }
-                            drinkRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
-                            drinkRecyclerView.setAdapter(drinkRecycleAdapter);
+                            drinkRecycleAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -221,7 +250,6 @@ public class StoreActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONObject("food").getJSONArray("products");
 
-                            ArrayList<Product> listData = new ArrayList<Product>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
@@ -248,10 +276,9 @@ public class StoreActivity extends AppCompatActivity {
                                     imageUrls.add(imageUrl);
                                 }
 
-                                listData.add(new Product(id, name, description, rate, sizes, imageUrls));
+                                listFoodData.add(new Product(id, name, description, rate, sizes, imageUrls));
                             }
-                            foodRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
-                            foodRecyclerView.setAdapter(foodRecycleAdapter);
+                            foodRecycleAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -286,9 +313,9 @@ public class StoreActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
 
         tabHostStore.getTabWidget().getChildAt(0).setLayoutParams(new
-                LinearLayout.LayoutParams(display.getWidth() / 2, 90));
+                LinearLayout.LayoutParams(display.getWidth() / 2, 100));
         tabHostStore.getTabWidget().getChildAt(1).setLayoutParams(new
-                LinearLayout.LayoutParams(display.getWidth() / 2, 90));
+                LinearLayout.LayoutParams(display.getWidth() / 2, 100));
         tabHostStore.getTabWidget().getChildAt(0).getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
         tabHostStore.getTabWidget().getChildAt(1).getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.MULTIPLY);
     }

@@ -1,126 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.StoreActivity"
-    android:orientation="vertical"
-    android:background="#ebebeb">
-
-    <RelativeLayout
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_header_store">
-        <ViewFlipper
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_background_store">
-        </ViewFlipper>
+        android:layout_height="match_parent"
+        tools:context=".Activities.StoreActivity"
+        android:orientation="vertical"
+        android:background="#ebebeb">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_info_store"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:background="#73000000"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_height="@dimen/height_header_store">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:elevation="10dp">
+
+                <ImageView
+                    android:id="@+id/btnSearch"
+                    android:src="@android:drawable/ic_menu_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"/>
+        </RelativeLayout>
+            <ViewFlipper
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/img_background_store">
+            </ViewFlipper>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_name_store"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="@dimen/height_name_store"
-                    android:text="Name store"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:id="@+id/txt_name_store"
-                    android:textColor="#8eb753"/>
+                android:layout_height="@dimen/height_info_store"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:background="#73000000"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
-                <ImageView
-                    android:layout_width="@dimen/height_name_store"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/height_name_store"
-                    android:src="@drawable/online"
-                    android:padding="7dp"
-                    android:id="@+id/img_status_store"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/height_name_store"
+                        android:text="Name store"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:id="@+id/txt_name_store"
+                        android:textColor="#8eb753"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/height_name_store"
+                        android:layout_height="@dimen/height_name_store"
+                        android:src="@drawable/online"
+                        android:padding="7dp"
+                        android:id="@+id/img_status_store"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_des_store"
+                    android:text="Description store"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:id="@+id/txt_address_store"
+                    android:textColor="#cacaca"/>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_des_store"
-                android:text="Description store"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:id="@+id/txt_address_store"
-                android:textColor="#cacaca"/>
-        </LinearLayout>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="15sp"
+            android:textColor="@color/description"
+            android:id="@+id/txt_desciption_store"
+            android:background="#328eafa1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
-    </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="15sp"
-        android:textColor="@color/description"
-        android:id="@+id/txt_desciption_store"
-        android:background="#d1d186"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
-
-    <TabHost
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tab_host_store">
-
-        <LinearLayout
+        <TabHost
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:id="@+id/tab_host_store">
 
-            <TabWidget
-                android:id="@android:id/tabs"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/tab_drink"
+                <TabWidget
+                    android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/recycler_drink_store">
+                    android:layout_height="wrap_content" />
 
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab_food"
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
-                    <android.support.v7.widget.RecyclerView
+                    <LinearLayout
+                        android:id="@+id/tab_drink"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/recycler_food_store">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <android.support.v4.widget.SwipeRefreshLayout
+                            android:id="@+id/swiperefresh"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recycler_drink_store">
 
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
+                            </android.support.v7.widget.RecyclerView>
+                        </android.support.v4.widget.SwipeRefreshLayout>
+                    </LinearLayout>
 
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+                    <LinearLayout
+                        android:id="@+id/tab_food"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-</LinearLayout>
+                        <android.support.v4.widget.SwipeRefreshLayout
+                            android:id="@+id/swiperefresh2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recycler_food_store">
+
+                            </android.support.v7.widget.RecyclerView>
+                        </android.support.v4.widget.SwipeRefreshLayout>
+                    </LinearLayout>
+
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+
+    </LinearLayout>

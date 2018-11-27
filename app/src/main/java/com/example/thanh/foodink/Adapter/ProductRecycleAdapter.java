@@ -73,9 +73,9 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
                     .into(itemViewHolder.imageView);
         }
 
-        itemViewHolder.imgDetail.setOnClickListener(new View.OnClickListener() {
+        itemViewHolder.setProductClickListener(new ProductClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClickItem(View view, int position, boolean isLongClick) {
                 ProductDialog productDialog = ProductDialog.newInstance(listData.get(i));
                 productDialog.show(fragmentManager, null);
             }
@@ -87,13 +87,13 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
         return listData.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder  {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageView;
         private TextView txtName;
         private TextView txtDescription;
         private LinearLayout linearLayoutRate;
         private ImageView imageViewStar;
-        private ImageView imgDetail;
+        private ProductRecycleAdapter.ProductClickListener productClickListener;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -101,7 +101,20 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
             txtName = itemView.findViewById(R.id.txt_name_item_product);
             txtDescription = itemView.findViewById(R.id.txt_description_item_product);
             linearLayoutRate = itemView.findViewById(R.id.linearlayout_rate);
-            imgDetail = itemView.findViewById(R.id.btimg_detail);
+            itemView.setOnClickListener(this);
         }
+
+        public void setProductClickListener(ProductRecycleAdapter.ProductClickListener productClickListener) {
+            this.productClickListener = productClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            productClickListener.onClickItem(v, getAdapterPosition(), false);
+        }
+    }
+
+    public interface ProductClickListener {
+        void onClickItem(View view, int position,boolean isLongClick);
     }
 }

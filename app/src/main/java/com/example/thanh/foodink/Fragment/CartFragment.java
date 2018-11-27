@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,14 +70,36 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     private LinearLayout linearRequest;
     private TextView txtMsg, txtTitle;
     private ImageView imgMsg;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private CheckConnection checkConnection;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.cart_fragment, container, false);
         addControls();
+        addEvents();
 
         return rootView;
+    }
+
+    private void addEvents() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (checkConnection.isNetworkAvailable() && sessionManager.has(User.AUTH)) {
+                            carts.clear();
+                            showCarts();
+                        } else {
+                            Toast.makeText(getContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
@@ -86,7 +109,11 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         btnOrder = rootView.findViewById(R.id.btn_order);
         requestQueue = Volley.newRequestQueue(this.getContext());
         sessionManager = new SessionManager(getContext());
-        CheckConnection checkConnection = new CheckConnection(this.getContext());
+        checkConnection = new CheckConnection(this.getContext());
+        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
+        carts = new ArrayList<>();
+        cartRecyclerAdapter = new CartRecyclerAdapter(carts);
+        cartRecyclerView.setAdapter(cartRecyclerAdapter);
 
         if (checkConnection.isNetworkAvailable() && sessionManager.has(User.AUTH)) {
             progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
@@ -112,7 +139,6 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                             Product product;
                             Size size;
                             Cart cart;
-                            carts = new ArrayList<>();
                             JSONObject sizeObject, productObject;
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -159,9 +185,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                 imgMsg.setImageResource(R.drawable.empty_cart);
                                 linearRequest.setVisibility(LinearLayout.VISIBLE);
                             }
-
-                            cartRecyclerAdapter = new CartRecyclerAdapter(carts);
-                            cartRecyclerView.setAdapter(cartRecyclerAdapter);
+                            cartRecyclerAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -201,14 +225,14 @@ public class CartFragment extends Fragment implements View.OnClickListener {
             final EditText edPhone = dialog.findViewById(R.id.ed_sdt);
             final EditText edAddress = dialog.findViewById(R.id.ed_address);
             Button btnCancel = dialog.findViewById(R.id.btn_cancel);
-            Button btnLogin = dialog.findViewById(R.id.btn_dat_hang);
+            Button btnOrder = dialog.findViewById(R.id.btn_dat_hang);
             btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
-            btnLogin.setOnClickListener(new View.OnClickListener() {
+            btnOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
@@ -237,7 +261,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         progress.hide();
-                                        Toast.makeText(getContext(), "Có lỗi, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Bạn vừa nhập địa chỉ không đúng, vui lòng nhập lại!", Toast.LENGTH_SHORT).show();
                                         Log.d("ApiError", error.toString());
                                         error.printStackTrace();
                                     }

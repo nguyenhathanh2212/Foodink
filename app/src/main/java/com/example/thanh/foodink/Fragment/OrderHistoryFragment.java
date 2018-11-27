@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -57,13 +58,36 @@ public class OrderHistoryFragment extends Fragment {
     private LinearLayout linearRequest;
     private TextView txtMsg, txtTitle;
     private ImageView imgMsg;
+    private CheckConnection checkConnection;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.order_history_fragment, container, false);
         addControls();
+        addEvents();
 
         return rootView;
+    }
+
+    private void addEvents() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (checkConnection.isNetworkAvailable() && sessionManager.has(User.AUTH)) {
+                            orders.clear();
+                            showOrders();
+                        } else {
+                            Toast.makeText(getContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
@@ -72,10 +96,14 @@ public class OrderHistoryFragment extends Fragment {
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
         requestQueue = Volley.newRequestQueue(this.getContext());
         sessionManager = new SessionManager(getContext());
-        CheckConnection checkConnection = new CheckConnection(this.getContext());
+        checkConnection = new CheckConnection(this.getContext());
+        progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
+        orders = new ArrayList<>();
+        orderRecyclerAdapter = new OrderRecyclerAdapter(orders);
+        orderRecyclerView.setAdapter(orderRecyclerAdapter);
+        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
 
         if (checkConnection.isNetworkAvailable() && sessionManager.has(User.AUTH)) {
-            progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
             showOrders();
         }
     }
@@ -97,7 +125,6 @@ public class OrderHistoryFragment extends Fragment {
                             Store store;
                             Size size;
                             Product product;
-                            orders = new ArrayList<>();
                             JSONObject jsonObject, storeObject, productObject, sizeObject, detailOrderObject;
                             JSONArray detailOrderArray;
 
@@ -175,9 +202,7 @@ public class OrderHistoryFragment extends Fragment {
                                 imgMsg.setImageResource(R.drawable.empty_order);
                                 linearRequest.setVisibility(LinearLayout.VISIBLE);
                             }
-
-                            orderRecyclerAdapter = new OrderRecyclerAdapter(orders);
-                            orderRecyclerView.setAdapter(orderRecyclerAdapter);
+                            orderRecyclerAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
