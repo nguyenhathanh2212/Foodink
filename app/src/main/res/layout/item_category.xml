@@ -22,6 +22,7 @@
             android:layout_height="25dp"
             android:id="@+id/txt_item_name_category"
             android:text="item"
+            android:textStyle="bold"
             android:textColor="@color/name"
             android:background="#ddd"
             android:textSize="15sp"

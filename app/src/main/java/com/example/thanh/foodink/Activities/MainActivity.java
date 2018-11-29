@@ -20,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Adapter.TabHomeAdapter;
-import com.example.thanh.foodink.Broadcast.ManagerConnect;
 import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Dialog.CheckConnectionDialog;
 import com.example.thanh.foodink.Helpers.CheckConnection;
@@ -47,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     };
     private int currentFragment;
     private static FragmentManager fragmentManager;
-//    private static Context mainContext;
-    private ManagerConnect managerConnect;
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<String>();
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        startActivity(new Intent(this, MapsActivity.class));
         permissions.add(ACCESS_FINE_LOCATION);
         permissions.add(ACCESS_COARSE_LOCATION);
 
@@ -71,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-//        mainContext = MainActivity.this;
-
-//        managerConnect = new ManagerConnect();
-//        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-//        registerReceiver(managerConnect, filter);
 
         if (User.checkUserAuth(this) && User.getUserAuth(this).checkTokenExpire()) {
             refreshLogin();
@@ -156,12 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        unregisterReceiver(managerConnect);
-//    }
-
     private void addControls() {
         fragmentManager = getSupportFragmentManager();
         viewPager = findViewById(R.id.home_viewpager);
@@ -174,12 +159,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-
+                setIconTab(i);
             }
 
             @Override
             public void onPageSelected(int i) {
-
+                setIconTab(i);
             }
 
             @Override
@@ -196,18 +181,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTabIcon() {
         currentFragment = viewPager.getCurrentItem();
+        setIconTab(currentFragment);
+    }
+
+    public void setIconTab(int currentTab) {
         tabLayout.getTabAt(0).setIcon(imageResId[0]);
         tabLayout.getTabAt(1).setIcon(imageResId[1]);
         tabLayout.getTabAt(2).setIcon(imageResId[2]);
         tabLayout.getTabAt(3).setIcon(imageResId[3]);
+
+        switch (currentTab) {
+            case 0: {
+                tabLayout.getTabAt(0).setIcon(R.drawable.home_active);
+                break;
+            }
+            case 1: {
+                tabLayout.getTabAt(1).setIcon(R.drawable.order_active);
+                break;
+            }
+            case 2: {
+                tabLayout.getTabAt(2).setIcon(R.drawable.notification_active);
+                break;
+            }
+            case 3: {
+                tabLayout.getTabAt(3).setIcon(R.drawable.profile_active);
+                break;
+            }
+        }
     }
 
     public static FragmentManager getFragManager() {
         return fragmentManager;
     }
-//    public static Context getMainContext() {
-//        return mainContext;
-//    }
 
     public void refreshLogin() {
         try {

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,6 +57,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ApiUrl apiUrl;
     private Button btnViewAllStores;
     private Progresser progress;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<Store> listStores;
+    private ArrayList<Category> listCategories;
+    private CheckConnection checkConnection;
 
     @Nullable
     @Override
@@ -69,6 +74,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void addEvents() {
         btnViewAllStores.setOnClickListener(this);
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (checkConnection.isNetworkAvailable()) {
+                            listStores.clear();
+                            listCategories.clear();
+                            showCategories();
+                            showStores();
+                        } else {
+                            Toast.makeText(getContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
@@ -88,13 +112,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         categoryRecyclerView.setLayoutManager(linearLayoutManager);
         storeRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         requestQueue = Volley.newRequestQueue(this.getContext());
-        CheckConnection checkConnection = new CheckConnection(this.getContext());
+        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
+
+        listStores = new ArrayList<Store>();
+        storeAdapter = new StoreRecyclerAdapter(listStores, R.layout.item_store);
+        storeRecyclerView.setAdapter(storeAdapter);
+        listCategories = new ArrayList<Category>();
+        categoryAdapter = new CategoryRecyclerAdapter(listCategories);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+        progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
+
+        checkConnection = new CheckConnection(this.getContext());
 
         if (checkConnection.isNetworkAvailable()) {
-            progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
-
             showCategories();
-
             showStores();
         }
     }
@@ -111,8 +142,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         try {
                             progress.hide();
                             JSONArray jsonArray = response.getJSONArray("stores");
-
-                            ArrayList<Store> listData = new ArrayList<Store>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
@@ -127,11 +156,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                     imageUrls.add(imageUrl);
                                 }
 
-                                listData.add(new Store(id, name, description, locaion, imageUrls));
+                                listStores.add(new Store(id, name, description, locaion, imageUrls));
                             }
-
-                            storeAdapter = new StoreRecyclerAdapter(listData, R.layout.item_store);
-                            storeRecyclerView.setAdapter(storeAdapter);
+                            storeAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -163,18 +190,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         try {
                             JSONArray jsonArray = response.getJSONArray("categories");
 
-                            ArrayList<Category> listData = new ArrayList<Category>();
-
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
                                 String name = jsonObject.getString("name");
                                 String imageUrl = jsonObject.getString("picture");
-                                listData.add(new Category(id, name, imageUrl));
+                                listCategories.add(new Category(id, name, imageUrl));
                             }
-
-                            categoryAdapter = new CategoryRecyclerAdapter(listData);
-                            categoryRecyclerView.setAdapter(categoryAdapter);
+                            categoryAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

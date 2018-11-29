@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -10,13 +11,13 @@
         android:layout_marginBottom="30dp"
         android:text="Đặt hàng"
         android:gravity="center"
-        android:textColor="#ef9723"
+        android:textColor="#f21206"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textAlignment="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:background="#ededed"/>
+        android:background="#86bfc1c0"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,16 +31,19 @@
             android:numeric="decimal"
             android:id="@+id/ed_sdt"
             android:hint="Nhập số điện thoại"
-            android:backgroundTint="@color/tab_order"
+            android:backgroundTint="#0b93e2"
             android:paddingTop="10dp"
+            android:textSize="14sp"
             android:paddingBottom="10dp"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ed_address"
             android:hint="Nhập địa chỉ giao hàng"
-            android:backgroundTint="@color/tab_order"
+            android:backgroundTint="#0b93e2"
             android:paddingTop="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="14sp"
             android:paddingBottom="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"

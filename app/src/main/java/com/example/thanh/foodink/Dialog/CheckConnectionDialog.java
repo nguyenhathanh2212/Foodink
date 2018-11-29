@@ -32,6 +32,7 @@ public class CheckConnectionDialog extends DialogFragment implements View.OnClic
         btnCancel = view.findViewById(R.id.btn_dialog_checkconnection_cancel);
         btnSetting = view.findViewById(R.id.btn_dialog_checkconnection_setting);
         btnSetting.setOnClickListener(this);
+        btnSetting.setText("Ok");
         btnCancel.setOnClickListener(this);
     }
 
@@ -42,7 +43,8 @@ public class CheckConnectionDialog extends DialogFragment implements View.OnClic
         }
 
         if (v.getId() == btnSetting.getId()) {
-            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+            this.dismiss();
+//            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
         }
     }
 }

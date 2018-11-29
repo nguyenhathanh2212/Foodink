@@ -365,7 +365,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                                     LatLng moveCamera = new LatLng((latitudeStore + locationCustomer.latitude) / 2,
                                             (longitudeStore + locationCustomer.longitude) / 2);
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(moveCamera, 13.2f));
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(moveCamera, 11.2f));
                                 }
                             } catch (Exception e) {
                                 Log.d("ApiError", e.toString());

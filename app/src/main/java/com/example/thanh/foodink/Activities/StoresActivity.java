@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Activities;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,19 +34,39 @@ public class StoresActivity extends AppCompatActivity {
     private JsonObjectRequest objectRequest;
     private ApiUrl apiUrl;
     private Progresser progress;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<Store> listData;
+    private CheckConnection checkConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckConnection checkConnection = new CheckConnection(getBaseContext());
+        setContentView(R.layout.activity_stores);
+        addControls();
+        addEvents();
+    }
 
-        if (checkConnection.isNetworkAvailable()) {
-            setContentView(R.layout.activity_stores);
+    private void addEvents() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        try {
+                            if (checkConnection.isNetworkAvailable()) {
+                                listData.clear();
+                                showStores();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                            }
 
-            addControls();
-        } else {
-            setContentView(R.layout.login_request);
-        }
+                            swipeRefreshLayout.setRefreshing(false);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
@@ -54,8 +75,15 @@ public class StoresActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         requestQueue = Volley.newRequestQueue(this);
         progress = new Progresser(this, "", "Đang load dữ liệu...");
-        showStores();
+        listData = new ArrayList<Store>();
+        checkConnection = new CheckConnection(getBaseContext());
+        storeRecyclerAdapter = new StoreRecyclerAdapter(listData, R.layout.item_all_stores, true);
+        recyclerView.setAdapter(storeRecyclerAdapter);
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
 
+        if (checkConnection.isNetworkAvailable()) {
+            showStores();
+        }
     }
 
 
@@ -72,7 +100,6 @@ public class StoresActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONArray("stores");
 
-                            ArrayList<Store> listData = new ArrayList<Store>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
@@ -90,8 +117,7 @@ public class StoresActivity extends AppCompatActivity {
                                 listData.add(new Store(id, name, description, locaion, imageUrls));
                             }
 
-                            storeRecyclerAdapter = new StoreRecyclerAdapter(listData, R.layout.item_all_stores, true);
-                            recyclerView.setAdapter(storeRecyclerAdapter);
+                            storeRecyclerAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

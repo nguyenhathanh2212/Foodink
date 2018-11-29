@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Activities;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.thanh.foodink.Adapter.ProductRecycleAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.Helpers.CheckConnection;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Product;
 import com.example.thanh.foodink.Models.Size;
@@ -42,6 +44,10 @@ public class ProductCategoryActivity extends AppCompatActivity {
     private TextView txtNameCategory;
     private RelativeLayout layoutSearch;
     private ImageView btnSearch;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<Product> listData;
+    private int categoryId;
+    private CheckConnection checkConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,26 @@ public class ProductCategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_category);
 
         addControls();
+        addEvents();
+    }
+
+    private void addEvents() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (checkConnection.isNetworkAvailable()) {
+                            listData.clear();
+                            addProducts(categoryId);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                }
+        );
     }
 
     private void addControls() {
@@ -60,9 +86,19 @@ public class ProductCategoryActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         progress = new Progresser(this, "", "Đang load dữ liệu...");
         Bundle bundle = getIntent().getExtras();
-        int categoryId = bundle.getInt("category_id", 1);
-        
-        addProducts(categoryId);
+        categoryId = bundle.getInt("category_id", 1);
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        listData = new ArrayList<Product>();
+        productRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
+        productRecyclerView.setAdapter(productRecycleAdapter);
+
+        checkConnection = new CheckConnection(this);
+
+        if (checkConnection.isNetworkAvailable()) {
+            addProducts(categoryId);
+        } else {
+            Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addProducts(int categoryId) {
@@ -82,7 +118,6 @@ public class ProductCategoryActivity extends AppCompatActivity {
 
                             JSONArray jsonArray = response.getJSONArray("products");
 
-                            ArrayList<Product> listData = new ArrayList<Product>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 int id = jsonObject.getInt("id");
@@ -111,8 +146,7 @@ public class ProductCategoryActivity extends AppCompatActivity {
 
                                 listData.add(new Product(id, name, description, rate, sizes, imageUrls));
                             }
-                            productRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
-                            productRecyclerView.setAdapter(productRecycleAdapter);
+                            productRecycleAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

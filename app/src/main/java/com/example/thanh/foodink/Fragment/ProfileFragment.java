@@ -51,7 +51,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Progresser progress;
 
     private TextView txtPhone, txtAddress, txtEmail;
-    private LinearLayout requestLogin;
 
     @Nullable
     @Override
@@ -72,7 +71,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         txtAddress = rootView.findViewById(R.id.address);
         txtEmail = rootView.findViewById(R.id.email);
         txtPhone = rootView.findViewById(R.id.phone);
-        requestLogin = rootView.findViewById(R.id.request_screen);
 
         progress = new Progresser(getContext(), "Đăng xuất", "Đang đăng xuất...");
     }
@@ -106,13 +104,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             txtPhone.setText(User.getUserAuth(getContext()).getPhone() + "");
             txtEmail.setText(User.getUserAuth(getContext()).getEmail() + "");
             txtAddress.setText(User.getUserAuth(getContext()).getAddress() + "");
-            requestLogin.setVisibility(LinearLayout.INVISIBLE);
         } else {
             logoutLayout.removeAllViews();
             ft_rep.replace(R.id.headerLayout, new LoginFragment());
             ft_rep = ft_rep.addToBackStack(null);
             ft_rep.commitAllowingStateLoss();
-            requestLogin.setVisibility(LinearLayout.VISIBLE);
+            txtPhone.setText("Số điện thoại");
+            txtEmail.setText("Email");
+            txtAddress.setText("Địa chỉ");
         }
     }
 
