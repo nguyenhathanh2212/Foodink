@@ -98,10 +98,10 @@ public class OrderHistoryFragment extends Fragment {
         sessionManager = SessionManager.getInstant(getContext());
         checkConnection = new CheckConnection(this.getContext());
         progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
+        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         orders = new ArrayList<>();
         orderRecyclerAdapter = new OrderRecyclerAdapter(orders);
         orderRecyclerView.setAdapter(orderRecyclerAdapter);
-        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
 
         if (checkConnection.isNetworkAvailable() && sessionManager.has(User.AUTH)) {
             showOrders();
@@ -110,7 +110,6 @@ public class OrderHistoryFragment extends Fragment {
 
     private void showOrders() {
         progress.show();
-        orders = new ArrayList<Order>();
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 ApiUrl.API_ORDERS,

@@ -53,7 +53,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             public void onClickItem(View view, int position, boolean isLongClick) {
                 Intent intent = new Intent(view.getContext(), ProductCategoryActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("catedory_id", listData.get(position).getId());
+                bundle.putInt("category_id", listData.get(position).getId());
                 intent.putExtras(bundle);
                 view.getContext().startActivity(intent);
             }

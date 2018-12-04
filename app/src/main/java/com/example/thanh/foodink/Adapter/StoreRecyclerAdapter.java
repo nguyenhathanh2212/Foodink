@@ -46,12 +46,12 @@ public class StoreRecyclerAdapter extends RecyclerView.Adapter<StoreRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull StoreRecyclerAdapter.StoreViewHolder viewHolder, int i) {
         viewHolder.txtName.setText(listData.get(i).getName());
-        viewHolder.txtDescription.setText(listData.get(i).getDescription());
+        viewHolder.txtDescription.setText(listData.get(i).getDescription(100));
 
         if (isAllStores) {
-            viewHolder.txtLocation.setText(listData.get(i).getLocation());
+            viewHolder.txtLocation.setText(listData.get(i).getLocation(25));
         } else {
-            viewHolder.txtLocation.setText(listData.get(i).getLocationLimit());
+            viewHolder.txtLocation.setText(listData.get(i).getLocation(19));
         }
         ArrayList<String> imageUrls = listData.get(i).getImages();
 
@@ -74,13 +74,6 @@ public class StoreRecyclerAdapter extends RecyclerView.Adapter<StoreRecyclerAdap
                 bundle.putSerializable("store", listData.get(position));
                 intent.putExtras(bundle);
                 view.getContext().startActivity(intent);
-//                MainActivity activity = (MainActivity) view.getContext();
-//                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//                StoreFragment storeFragment = new StoreFragment();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.home_viewpager, storeFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
             }
         });
     }

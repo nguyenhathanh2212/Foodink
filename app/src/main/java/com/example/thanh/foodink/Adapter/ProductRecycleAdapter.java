@@ -1,6 +1,8 @@
 package com.example.thanh.foodink.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.thanh.foodink.Activities.ProductActivity;
 import com.example.thanh.foodink.Dialog.ProductDialog;
 import com.example.thanh.foodink.Models.Product;
 import com.example.thanh.foodink.R;
@@ -41,7 +44,7 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
     @Override
     public void onBindViewHolder(@NonNull ProductRecycleAdapter.ItemViewHolder itemViewHolder, final int i) {
         itemViewHolder.txtName.setText(listData.get(i).getName());
-        itemViewHolder.txtDescription.setText(listData.get(i).getDescription());
+        itemViewHolder.txtDescription.setText(listData.get(i).getDescriptionLimit());
         int rate = (int) Math.round(listData.get(i).getRate());
         itemViewHolder.linearLayoutRate.removeAllViews();
 
@@ -76,8 +79,14 @@ public class ProductRecycleAdapter extends RecyclerView.Adapter<ProductRecycleAd
         itemViewHolder.setProductClickListener(new ProductClickListener() {
             @Override
             public void onClickItem(View view, int position, boolean isLongClick) {
-                ProductDialog productDialog = ProductDialog.newInstance(listData.get(i));
-                productDialog.show(fragmentManager, null);
+                Product product = listData.get(i);
+                Intent mIntent = new Intent(context, ProductActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable("product", product);
+                mIntent.putExtras(mBundle);
+                context.startActivity(mIntent);
+//                ProductDialog productDialog = ProductDialog.newInstance(listData.get(i));
+//                productDialog.show(fragmentManager, null);
             }
         });
     }

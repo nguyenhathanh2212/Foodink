@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Activities;
 
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ public class ProductCategoryActivity extends AppCompatActivity {
     private ImageView btnSearch;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Product> listData;
-    private int categoryId;
+    private int categoryId, currentPage, totalPage;
     private CheckConnection checkConnection;
 
     @Override
@@ -65,7 +66,8 @@ public class ProductCategoryActivity extends AppCompatActivity {
                     public void onRefresh() {
                         if (checkConnection.isNetworkAvailable()) {
                             listData.clear();
-                            addProducts(categoryId);
+                            setCurrentPage(1);
+                            addProducts(categoryId, currentPage);
                         } else {
                             Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
                         }
@@ -75,6 +77,19 @@ public class ProductCategoryActivity extends AppCompatActivity {
 
                 }
         );
+
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) productRecyclerView.getLayoutManager();
+        productRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if(totalItemCount == (lastVisibleItem + 1) && getCurrentPage() < getTotalPage()) {
+                    addProducts(categoryId, getCurrentPage() + 1);
+                }
+            }
+        });
     }
 
     private void addControls() {
@@ -86,7 +101,7 @@ public class ProductCategoryActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         progress = new Progresser(this, "", "Đang load dữ liệu...");
         Bundle bundle = getIntent().getExtras();
-        categoryId = bundle.getInt("category_id", 1);
+        categoryId = bundle.getInt("category_id", 0);
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         listData = new ArrayList<Product>();
         productRecycleAdapter = new ProductRecycleAdapter(listData, getApplicationContext(), getSupportFragmentManager());
@@ -95,23 +110,42 @@ public class ProductCategoryActivity extends AppCompatActivity {
         checkConnection = new CheckConnection(this);
 
         if (checkConnection.isNetworkAvailable()) {
-            addProducts(categoryId);
+            setCurrentPage(1);
+            addProducts(categoryId, currentPage);
         } else {
             Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void addProducts(int categoryId) {
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    private void addProducts(int categoryId, int page) {
         progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                apiUrl.API_CATEGORIES + "/" + categoryId + "?get_all=1",
+                apiUrl.API_CATEGORIES + "/" + categoryId + "?page=" + page,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         progress.hide();
                         try {
+                            setTotalPage(response.getJSONObject("pagination").getInt("total_pages"));
+                            setCurrentPage(response.getJSONObject("pagination").getInt("page"));
                             JSONObject jsonCategory = response.getJSONObject("category");
                             String nameCategory = jsonCategory.getString("name");
                             txtNameCategory.setText(nameCategory);

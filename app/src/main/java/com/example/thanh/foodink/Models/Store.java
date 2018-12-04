@@ -9,6 +9,24 @@ public class Store implements Serializable {
     private String description;
     private String location;
     private ArrayList<String> images;
+    private String opentAt;
+    private String closeAt;
+
+    public String getOpentAt() {
+        return opentAt;
+    }
+
+    public void setOpentAt(String opentAt) {
+        this.opentAt = opentAt;
+    }
+
+    public String getCloseAt() {
+        return closeAt;
+    }
+
+    public void setCloseAt(String closeAt) {
+        this.closeAt = closeAt;
+    }
 
     public Store() {
     }
@@ -19,12 +37,22 @@ public class Store implements Serializable {
         this.images = images;
     }
 
-    public Store(int id, String name, String description, String location, ArrayList<String> images) {
+    public  Store(int id, String name, String description, String location, ArrayList<String> images) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.images = images;
+    }
+
+    public  Store(int id, String name, String description, String location, ArrayList<String> images, String opentAt, String closeAt) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.images = images;
+        this.opentAt = opentAt;
+        this.closeAt = closeAt;
     }
 
     public int getId() {
@@ -44,6 +72,11 @@ public class Store implements Serializable {
                 .length() <= 0 ? "" : description;
     }
 
+    public String getDescription(int limit) {
+        return description == null || description.trim().equals("null") || description.trim()
+                .length() <= 0 ? "" : (description.trim().length() >= limit ? description.substring(0, limit) + "..." : description);
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -52,8 +85,9 @@ public class Store implements Serializable {
         return location;
     }
 
-    public String getLocationLimit() {
-        return location.substring(0, 19) + "...";
+    public String getLocation(int limit) {
+        return location == null || location.trim().equals("null") || location.trim()
+                .length() <= 0 ? "" : (location.trim().length() >= limit ? location.substring(0, limit) + "..." : location);
     }
 
     public void setLocation(String location) {

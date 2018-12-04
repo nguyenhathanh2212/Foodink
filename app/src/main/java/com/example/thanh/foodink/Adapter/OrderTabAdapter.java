@@ -20,8 +20,8 @@ public class OrderTabAdapter extends FragmentStatePagerAdapter {
         fragments.add(new CartFragment());
         fragments.add(new OrderHistoryFragment());
         titles = new ArrayList<String >();
-        titles.add("Carts");
-        titles.add("Order Histories");
+        titles.add("Giỏ hàng");
+        titles.add("Lịch sử");
     }
 
     @Override

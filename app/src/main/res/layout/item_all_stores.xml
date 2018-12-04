@@ -35,8 +35,8 @@
                     android:textColor="@color/name"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:id="@+id/txt_item_name_store"/>
             </LinearLayout>
 
@@ -45,8 +45,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Description"
+                android:paddingBottom="2dp"
                 android:textColor="@color/description"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,11 +57,13 @@
                     android:layout_height="wrap_content"
                     android:text="Địa chỉ: "
                     android:textStyle="bold"
+                    android:textSize="13sp"
                     android:textColor="#000"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Địa chỉ"
+                    android:textSize="13sp"
                     android:id="@+id/txt_item_location_store"
                     android:textColor="#000"/>
             </LinearLayout>
