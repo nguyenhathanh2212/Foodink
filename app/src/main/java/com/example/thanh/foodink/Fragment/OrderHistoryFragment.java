@@ -95,7 +95,7 @@ public class OrderHistoryFragment extends Fragment {
         orderRecyclerView = rootView.findViewById(R.id.recycler_all_order);
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
         requestQueue = Volley.newRequestQueue(this.getContext());
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstant(getContext());
         checkConnection = new CheckConnection(this.getContext());
         progress = new Progresser(getContext(), "", "Đang load dữ liệu...");
         orders = new ArrayList<>();

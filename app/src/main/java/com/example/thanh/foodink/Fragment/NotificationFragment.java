@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Adapter.NotificationTabAdapter;
 import com.example.thanh.foodink.Adapter.TabHomeAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
+import com.example.thanh.foodink.Helpers.CheckConnection;
 import com.example.thanh.foodink.Helpers.Progresser;
 import com.example.thanh.foodink.Models.Notification;
 import com.example.thanh.foodink.Models.User;
@@ -56,11 +58,14 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
     private RequestQueue requestQueue;
     private Progresser progress;
     private String currentStatus;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private CheckConnection checkConnection;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.notification_fragment, container, false);
+        mappingWidgets();
 
         return rootView;
     }
@@ -76,6 +81,25 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
         progress = new Progresser(getContext(), "", "Đang tải...");
         imgShipperStatus = (ImageView) rootView.findViewById(R.id.imgShipperStatus);
         currentStatus = "";
+        linearRequest = (LinearLayout) rootView.findViewById(R.id.request_screen);
+        swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
+        checkConnection = new CheckConnection(this.getContext());
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (checkConnection.isNetworkAvailable() && User.checkUserAuth(getContext())) {
+                            loadData();
+                        } else {
+                            Toast.makeText(getContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                }
+        );
     }
 
     @Override
@@ -83,13 +107,9 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-            linearRequest = (LinearLayout) rootView.findViewById(R.id.request_screen);
-
             if (User.checkUserAuth(getContext()) && User.getUserAuth(getContext()).getShipperId() > 0) {
                 linearRequest.setVisibility(LinearLayout.INVISIBLE);
-                mappingWidgets();
-                swChangeShipperStatus.setOnCheckedChangeListener(null);
-                showShipperStatus();
+                loadData();
             } else {
                 TextView tvTitle = (TextView) rootView.findViewById(R.id.txt_title);
                 TextView tvMsg = (TextView) rootView.findViewById(R.id.txt_msg);
@@ -98,6 +118,14 @@ public class NotificationFragment extends Fragment implements SwitchCompat.OnChe
                 linearRequest.setVisibility(LinearLayout.VISIBLE);
             }
         }
+    }
+
+    private void loadData() {
+        swChangeShipperStatus.setOnCheckedChangeListener(null);
+        adapter = new NotificationTabAdapter(MainActivity.getFragManager());
+        notificationViewPager.setAdapter(adapter);
+        notificationTabLayout.setupWithViewPager(notificationViewPager);
+        showShipperStatus();
     }
 
     @Override

@@ -108,7 +108,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false));
         btnOrder = rootView.findViewById(R.id.btn_order);
         requestQueue = Volley.newRequestQueue(this.getContext());
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstant(getContext());
         checkConnection = new CheckConnection(this.getContext());
         swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         carts = new ArrayList<>();

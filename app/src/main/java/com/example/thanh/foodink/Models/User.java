@@ -94,27 +94,27 @@ public class User {
     public static void setUserAuth(Context context, User user) {
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstant(context);
         sessionManager.set(User.AUTH, userJson);
     }
 
     public static User getUserAuth(Context context) {
         Gson gson = new Gson();
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstant(context);
         String userJson = sessionManager.get(User.AUTH);
 
         return gson.fromJson(userJson, User.class);
     }
 
     public static boolean checkUserAuth(Context context) {
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstant(context);
         String userJson = sessionManager.get(User.AUTH);
 
         return !userJson.equals("");
     }
 
     public static void logout(Context context) {
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstant(context);
         sessionManager.forget(User.AUTH);
     }
 
