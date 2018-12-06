@@ -23,6 +23,7 @@ import com.example.thanh.foodink.Adapter.TabHomeAdapter;
 import com.example.thanh.foodink.Configs.ApiUrl;
 import com.example.thanh.foodink.Dialog.CheckConnectionDialog;
 import com.example.thanh.foodink.Helpers.CheckConnection;
+import com.example.thanh.foodink.Helpers.SessionManager;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+        SessionManager.getInstant(getApplicationContext());
         fragmentManager = getSupportFragmentManager();
         viewPager = findViewById(R.id.home_viewpager);
         viewPager.setOffscreenPageLimit(3);

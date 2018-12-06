@@ -30,7 +30,7 @@ public class OrderFragment extends Fragment {private ViewPager viewPager;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstant(getContext());
         rootView = inflater.inflate(R.layout.order_fragment, container, false);
 
         addControls();

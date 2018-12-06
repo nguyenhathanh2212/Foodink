@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Adapter.CurrentNotificationRecyclerAdapter;
 import com.example.thanh.foodink.Helpers.SessionManager;
 import com.example.thanh.foodink.Models.Notification;
@@ -39,6 +40,7 @@ public class CurrentNotificationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.current_notification_fragment, container, false);
+        mappingWidgets();
         loadData();
 
         return rootView;
@@ -49,25 +51,14 @@ public class CurrentNotificationFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-//            loadData();
+            loadData();
         }
     }
 
-    private void loadData() {
-        SessionManager sessionManager = new SessionManager(getContext());
-        String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
-        Gson gson = new Gson();
+    private void mappingWidgets() {
         listNotification = new ArrayList<>();
-
-        if (!notificationsJson.equals("")) {
-            Type type = new TypeToken<ArrayList<Notification>>() {}.getType();
-            listNotification = gson.fromJson(notificationsJson, type);
-        }
-
-        adapter = new CurrentNotificationRecyclerAdapter(listNotification);
         recyclerCurrentNotification = (RecyclerView) rootView.findViewById(R.id.recyclerCurrentNotification);
         recyclerCurrentNotification.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerCurrentNotification.setAdapter(adapter);
 
         btnClearAll = (ImageView) rootView.findViewById(R.id.btnClearAll);
         btnClearAll.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +71,7 @@ public class CurrentNotificationFragment extends Fragment {
                         .setPositiveButton("Tất nhiên rồi", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SessionManager sessionManager = new SessionManager(getContext());
+                                SessionManager sessionManager = SessionManager.getInstant(getContext());
                                 sessionManager.forget("NOTIFICATION_LIST");
                                 listNotification.clear();
                                 adapter.notifyDataSetChanged();
@@ -91,5 +82,23 @@ public class CurrentNotificationFragment extends Fragment {
                         .show();
             }
         });
+    }
+
+    private void loadData() {
+        if (getContext() == null) {
+            return;
+        }
+
+        SessionManager sessionManager = SessionManager.getInstant(getContext());
+        String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
+        Gson gson = new Gson();
+
+        if (!notificationsJson.equals("")) {
+            Type type = new TypeToken<ArrayList<Notification>>() {}.getType();
+            listNotification = gson.fromJson(notificationsJson, type);
+        }
+
+        adapter = new CurrentNotificationRecyclerAdapter(listNotification);
+        recyclerCurrentNotification.setAdapter(adapter);
     }
 }

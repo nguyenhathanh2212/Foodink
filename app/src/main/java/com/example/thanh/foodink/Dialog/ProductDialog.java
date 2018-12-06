@@ -204,7 +204,7 @@ public class ProductDialog extends DialogFragment implements View.OnClickListene
                 }
             }
 
-            SessionManager sessionManager = new SessionManager(this.getContext());
+            SessionManager sessionManager = SessionManager.getInstant(this.getContext());
             if (sessionManager.has(User.AUTH)) {
                 Cart cart = new Cart(product.getId(), radioGroupSize.getCheckedRadioButtonId(), 1, quantity, price);
                 addCart(cart, this);

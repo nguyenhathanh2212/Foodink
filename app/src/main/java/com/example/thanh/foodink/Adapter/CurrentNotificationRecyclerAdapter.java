@@ -79,7 +79,7 @@ public class CurrentNotificationRecyclerAdapter extends RecyclerView.Adapter<Cur
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SessionManager sessionManager = new SessionManager(view.getContext());
+                                SessionManager sessionManager = SessionManager.getInstant(view.getContext());
                                 String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
                                 ArrayList<Notification> nofiticationList = new ArrayList<>();
                                 Gson gson = new Gson();
