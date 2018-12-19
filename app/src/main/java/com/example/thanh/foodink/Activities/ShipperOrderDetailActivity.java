@@ -33,6 +33,8 @@ import com.example.thanh.foodink.CustomMap.WorkaroundMapFragment;
 import com.example.thanh.foodink.Fragment.OrderDetailFragment;
 import com.example.thanh.foodink.Fragment.ShipperOrderReceivedRejectFragment;
 import com.example.thanh.foodink.Helpers.Progresser;
+import com.example.thanh.foodink.Helpers.SessionManager;
+import com.example.thanh.foodink.Models.Notification;
 import com.example.thanh.foodink.Models.User;
 import com.example.thanh.foodink.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,10 +45,14 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +63,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
     public static final String SHOW_RECEIVED_ORDER_ACTION = "Show Received Order";
 
     private TextView tvStoreNameHeader;
+    private LinearLayout orderInfoFragment;
     private Intent intent;
     private RequestQueue requestQueue;
     private Progresser progress;
@@ -94,6 +101,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
         tvStoreNameHeader = (TextView) findViewById(R.id.tvStoreNameHeader);
         String storeName = intent.getStringExtra("STORE_NAME");
         tvStoreNameHeader.setText(storeName);
+        orderInfoFragment = (LinearLayout) findViewById(R.id.orderInfoFragment);
     }
 
     private void process() {
@@ -111,6 +119,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                 showOrder();
                 break;
             case REJECT_ACTION:
+                removeNotification();
                 finish();
                 break;
             case SHOW_RECEIVED_ORDER_ACTION:
@@ -128,6 +137,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
     }
 
     private void showReceivedOrder() {
+        orderInfoFragment.removeAllViews();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft_rep = fm.beginTransaction();
         ft_rep.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -164,6 +174,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                                     FragmentManager fm = getSupportFragmentManager();
                                     FragmentTransaction ft_rep = fm.beginTransaction();
                                     ft_rep.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                                    orderInfoFragment.removeAllViews();
 
                                     ShipperOrderReceivedRejectFragment fragment = new ShipperOrderReceivedRejectFragment();
                                     Bundle bundle = new Bundle();
@@ -173,6 +184,8 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                                     ft_rep.replace(R.id.orderInfoFragment, fragment);
                                     ft_rep.commit();
                                 }
+
+                                removeNotification();
                             } catch (Exception e) {
                                 Log.d("ApiError", e.toString());
                                 e.printStackTrace();
@@ -237,6 +250,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
 
                                         ft_rep.replace(R.id.orderInfoFragment, fragment);
                                         ft_rep.commit();
+                                        removeNotification();
                                     }
                                 } else {
                                     throw new Exception();
@@ -315,6 +329,28 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                 rejectOrder();
                 break;
         }
+    }
+
+    private void removeNotification()
+    {
+        int orderID = intent.getIntExtra("ORDER_ID", 0);
+        SessionManager sessionManager = SessionManager.getInstant(this);
+        String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
+        ArrayList<Notification> nofiticationList = new ArrayList<>();
+        Gson gson = new Gson();
+
+        if (!notificationsJson.equals("")) {
+            Type type = new TypeToken<ArrayList<Notification>>() {}.getType();
+            nofiticationList = gson.fromJson(notificationsJson, type);
+        }
+
+        for (int i = 0; i < nofiticationList.size(); i++) {
+            if (nofiticationList.get(i).getOrderID() == orderID) {
+                nofiticationList.remove(i);
+            }
+        }
+
+        sessionManager.set("NOTIFICATION_LIST", gson.toJson(nofiticationList));
     }
 
     @Override
