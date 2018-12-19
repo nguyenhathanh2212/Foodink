@@ -52,7 +52,10 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class StoreActivity extends AppCompatActivity {
     private TextView txtName, txtAddress, txtDescription;
@@ -158,6 +161,16 @@ public class StoreActivity extends AppCompatActivity {
         foodRecyclerView.setAdapter(foodRecycleAdapter);
 
         checkConnection = new CheckConnection(getBaseContext());
+
+
+
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Calendar cal = Calendar.getInstance();
+        String currentTime = dateFormat.format(cal.getTime());
+
+        if (store.getOpentAt().compareTo(store.getCloseAt()) != 0 && store.getOpentAt().compareTo(currentTime) < 0 && store.getCloseAt().compareTo(currentTime) > 0) {
+            imgStatus.setImageResource(R.drawable.offline);
+        }
 
         if (checkConnection.isNetworkAvailable()) {
             getDrinkProduct(store.getId());

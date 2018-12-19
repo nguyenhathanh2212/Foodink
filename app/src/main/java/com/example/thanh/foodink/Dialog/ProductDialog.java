@@ -48,7 +48,7 @@ import java.util.Map;
 public class ProductDialog extends DialogFragment implements View.OnClickListener {
     private View rootView;
     private ImageView imgProduct;
-    private TextView txtName, txtDescription, txtNumber;
+    private TextView txtName, txtNumber;
     private Button btnAddCart;
     private ImageButton btimgPlus, btimgSub;
     private LinearLayout linearLayoutRate;
@@ -95,7 +95,6 @@ public class ProductDialog extends DialogFragment implements View.OnClickListene
 
     private void addControls(View view) {
         txtName = view.findViewById(R.id.txt_name_detail_product);
-        txtDescription = view.findViewById(R.id.txt_description_detail_product);
         txtNumber = view.findViewById(R.id.txt_number_item);
         imgProduct = view.findViewById(R.id.image_detail_product);
         btnAddCart = view.findViewById(R.id.btn_detail_add_cart);
@@ -106,8 +105,6 @@ public class ProductDialog extends DialogFragment implements View.OnClickListene
 
         this.product = (Product) getArguments().getSerializable("product");
         txtName.setText(product.getName());
-        txtDescription.setText(product.getDescription());
-        txtDescription.setMovementMethod(new ScrollingMovementMethod());
         btnAddCart.setText("Thêm vào giỏ ("+ formatter.format(product.getSizes().get(0).getPrice()) + "đ)");
 
         RadioButton radioSize;

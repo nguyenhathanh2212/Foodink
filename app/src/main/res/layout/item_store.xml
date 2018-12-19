@@ -30,24 +30,25 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignBottom="@+id/img_item_store"
                 android:layout_alignParentStart="true"
-                android:background="#1704edca">
+                android:background="#92ababab">
 
                 <TextView
                     android:id="@+id/txt_item_name_store"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:text="Name"
-                    android:textColor="#8eb753"
+                    android:textColor="#0823ab"
                     android:textSize="14sp"
                     android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/txt_item_description_store"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="Description"
-                    android:textColor="@color/description"
-                    android:textSize="12sp"
+                    android:textColor="#af3314"
+                    android:textSize="13sp"
                     android:paddingLeft="5dp"
                     android:hyphenationFrequency="none" />
 

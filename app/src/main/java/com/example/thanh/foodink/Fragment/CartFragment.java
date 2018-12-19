@@ -255,6 +255,8 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                                         progress.hide();
                                         dialog.dismiss();
                                         Toast.makeText(getContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                                        carts.clear();
+                                        cartRecyclerAdapter.notifyDataSetChanged();
                                     }
                                 },
                                 new Response.ErrorListener() {

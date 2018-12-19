@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.thanh.foodink.Activities.ChangePassActivity;
 import com.example.thanh.foodink.Activities.LoginActivity;
 import com.example.thanh.foodink.Activities.MainActivity;
 import com.example.thanh.foodink.Configs.ApiUrl;
@@ -45,6 +46,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private LinearLayout logoutLayout;
 
     private RelativeLayout btnLogout;
+    private RelativeLayout btnChangePass;
     private Typeface iconFont;
 
     private RequestQueue requestQueue;
@@ -81,7 +83,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.btnLogout:
                 logout();
                 break;
+            case R.id.btn_change_pass:
+                changePassword();
+                break;
         }
+    }
+
+    private void changePassword() {
+        Intent intent = new Intent(getContext(), ChangePassActivity.class);
+        startActivity(intent);
     }
 
     private void showUserHeaderLayout() {
@@ -98,12 +108,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             View logoutView = getLayoutInflater().inflate(R.layout.logout_fragment, null);
             logoutLayout.addView(logoutView);
             FontManager.markAsIconContainer(rootView.findViewById(R.id.btnLogout), iconFont);
+            FontManager.markAsIconContainer(rootView.findViewById(R.id.btn_change_pass), iconFont);
 
             btnLogout = (RelativeLayout) rootView.findViewById(R.id.btnLogout);
+            btnChangePass = (RelativeLayout) rootView.findViewById(R.id.btn_change_pass);
             btnLogout.setOnClickListener(this);
-            txtPhone.setText(User.getUserAuth(getContext()).getPhone() + "");
-            txtEmail.setText(User.getUserAuth(getContext()).getEmail() + "");
-            txtAddress.setText(User.getUserAuth(getContext()).getAddress() + "");
+            btnChangePass.setOnClickListener(this);
+
+            if (!User.getUserAuth(getContext()).getPhone().equals("null")) {
+                txtPhone.setText(User.getUserAuth(getContext()).getPhone() + "");
+            }
+
+            if (!User.getUserAuth(getContext()).getEmail().equals("null")) {
+                txtEmail.setText(User.getUserAuth(getContext()).getEmail() + "");
+            }
+
+            if (!User.getUserAuth(getContext()).getAddress().equals("null")) {
+                txtAddress.setText(User.getUserAuth(getContext()).getAddress() + "");
+            }
+
         } else {
             logoutLayout.removeAllViews();
             ft_rep.replace(R.id.headerLayout, new LoginFragment());

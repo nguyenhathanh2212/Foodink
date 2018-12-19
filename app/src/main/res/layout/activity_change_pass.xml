@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Activities.LoginActivity"
+    android:id="@+id/loginViewLayout"
+    android:background="@drawable/login_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_arrow_left"
+            android:textSize="25dp"
+            android:textColor="#fff"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Đổi mật khẩu "
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textSize="25dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/btnRegisterFB"
+                android:src="@drawable/fb_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/btnRegisterGG"
+                android:src="@drawable/google_plus_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/btnRegisterTW"
+                android:src="@drawable/twitter_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hoặc"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <EditText
+                android:id="@+id/edtOldPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+                android:hint="Mật khẩu củ"
+                android:drawablePadding="15dp"
+                android:inputType="textWebPassword"
+                android:textColorHint="#fff"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"/>
+            <EditText
+
+                android:id="@+id/edtNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+                android:hint="Mật khẩu mới"
+                android:drawablePadding="15dp"
+                android:inputType="textWebPassword"
+                android:textColorHint="#fff"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"/>
+
+            <EditText
+                android:id="@+id/edtPasswordConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+                android:hint="Xác nhận mật khẩu mới"
+                android:drawablePadding="15dp"
+                android:inputType="textWebPassword"
+                android:textColorHint="#fff"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"/>
+
+            <Button
+                android:id="@+id/btnChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đổi mật khẩu"
+                android:textColor="#fff"
+                android:background="@drawable/border_radius_green_button"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp">
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -71,7 +71,13 @@ public class Product implements Serializable{
     }
 
     public String getDescription() {
-        return description;
+        return description == null || description.trim().equals("null") || description.trim()
+                .length() <= 0 ? "" : description;
+    }
+
+    public String getDescriptionLimit() {
+        return description == null || description.trim().equals("null") || description.trim()
+                .length() <= 0 ? "" : (description.trim().length() >= 100 ? description.substring(0, 100) + "..." : description);
     }
 
     public void setDescription(String description) {

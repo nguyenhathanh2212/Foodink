@@ -1,5 +1,6 @@
 package com.example.thanh.foodink.Activities;
 
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +25,11 @@ import com.example.thanh.foodink.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class StoresActivity extends AppCompatActivity {
 
@@ -37,6 +42,7 @@ public class StoresActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Store> listData;
     private CheckConnection checkConnection;
+    private int currentPage, totalPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,8 @@ public class StoresActivity extends AppCompatActivity {
                         try {
                             if (checkConnection.isNetworkAvailable()) {
                                 listData.clear();
-                                showStores();
+                                setCurrentPage(1);
+                                showStores(getCurrentPage());
                             } else {
                                 Toast.makeText(getApplicationContext(), "Vui lòng bật kết nối mạng!", Toast.LENGTH_SHORT).show();
                             }
@@ -67,6 +74,19 @@ public class StoresActivity extends AppCompatActivity {
 
                 }
         );
+
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if(totalItemCount == (lastVisibleItem + 1) && getCurrentPage() < getTotalPage()) {
+                    showStores(getCurrentPage() + 1);
+                }
+            }
+        });
     }
 
     private void addControls() {
@@ -82,22 +102,40 @@ public class StoresActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
 
         if (checkConnection.isNetworkAvailable()) {
-            showStores();
+            setCurrentPage(1);
+            showStores(getCurrentPage());
         }
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
 
-    private void showStores() {
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    private void showStores(int page) {
         progress.show();
         objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                apiUrl.API_STORES + "?get_all=1",
+                apiUrl.API_STORES + "?page=" + page,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         progress.hide();
                         try {
+                            setTotalPage(response.getJSONObject("pagination").getInt("total_pages"));
+                            setCurrentPage(response.getJSONObject("pagination").getInt("page"));
                             JSONArray jsonArray = response.getJSONArray("stores");
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -114,7 +152,9 @@ public class StoresActivity extends AppCompatActivity {
                                     imageUrls.add(imageUrl);
                                 }
 
-                                listData.add(new Store(id, name, description, locaion, imageUrls));
+                                String openAt = jsonObject.getString("open_at");
+                                String closeAt = jsonObject.getString("close_at");
+                                listData.add(new Store(id, name, description, locaion, imageUrls, openAt, closeAt));
                             }
 
                             storeRecyclerAdapter.notifyDataSetChanged();

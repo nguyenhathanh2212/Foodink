@@ -156,7 +156,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                     imageUrls.add(imageUrl);
                                 }
 
-                                listStores.add(new Store(id, name, description, locaion, imageUrls));
+                                String openAt = jsonObject.getString("open_at");
+                                String closeAt = jsonObject.getString("close_at");
+
+                                listStores.add(new Store(id, name, description, locaion, imageUrls, openAt, closeAt));
                             }
                             storeAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
