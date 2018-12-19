@@ -4,6 +4,7 @@ public interface ApiUrl {
     public static final String API_URL = "https://fudink.herokuapp.com/api/";
 
     public static final String API_LOGIN = API_URL + "login";
+    public static final String API_CHANGEPASS = API_URL + "users/password";
     public static final String API_LOGOUT = API_URL + "logout";
     public static final String API_REGISTER = API_URL + "signup";
     public static final String API_LOGIN_REFRESH = API_URL + "refresh";
