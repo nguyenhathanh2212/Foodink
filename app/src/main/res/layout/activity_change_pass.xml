@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Activities.LoginActivity"
     android:id="@+id/loginViewLayout"
-    android:background="@drawable/login_bg">
+    android:background="@drawable/change_pw_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,46 +39,8 @@
             android:text="Đổi mật khẩu "
             android:textColor="#fff"
             android:gravity="center"
-            android:textSize="25dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:layout_marginTop="5dp">
-
-            <ImageView
-                android:id="@+id/btnRegisterFB"
-                android:src="@drawable/fb_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/btnRegisterGG"
-                android:src="@drawable/google_plus_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/btnRegisterTW"
-                android:src="@drawable/twitter_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="hoặc"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:textSize="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:textSize="25dp"
+            android:layout_marginBottom="100dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@android:drawable/ic_lock_idle_lock"
-                android:hint="Mật khẩu củ"
+                android:hint="Mật khẩu cũ"
                 android:drawablePadding="15dp"
                 android:inputType="textWebPassword"
                 android:textColorHint="#fff"
@@ -138,7 +100,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginTop="15dp">
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
