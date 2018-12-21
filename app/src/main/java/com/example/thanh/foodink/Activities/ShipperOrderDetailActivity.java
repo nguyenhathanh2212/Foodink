@@ -167,7 +167,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                                 if (isSuccess) {
                                     Toast.makeText(getApplicationContext(), "Chấp nhận đơn hàng thành công", Toast.LENGTH_LONG);
                                     JSONObject shipperOrder = response.getJSONObject("shipper_order");
-                                    getIntent().putExtra("SHIPPER_ORDER_ID", shipperOrder.getInt("id"));
+                                    getIntent().putExtra("ORDER_ID", shipperOrder.getInt("id"));
                                     showReceivedOrder();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Thất bại! Đã có người nhận đơn hàng này", Toast.LENGTH_LONG);
@@ -358,10 +358,10 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
         mMap = googleMap;
         progress.show();
         try {
-            int orderID = intent.getIntExtra("SHIPPER_ORDER_ID", 0);
+            int orderID = intent.getIntExtra("ORDER_ID", 0);
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    ApiUrl.API_ORDER + "/" + orderID,
+                    ApiUrl.API_SHIPPER_ORDER_LIST + "/" + orderID,
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -370,11 +370,13 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
                             try {
                                 boolean isSuccess = response.getBoolean("success");
                                 if (isSuccess) {
-                                    double longitudeStore = response.getJSONObject("store").getDouble("longitude");
-                                    double latitudeStore = response.getJSONObject("store").getDouble("latitude");
-                                    String addressCustomer = response.getJSONObject("order").getString("address");
+                                    double longitudeStore = response.getJSONObject("order").getJSONObject("store").getDouble("longitude");
+                                    double latitudeStore = response.getJSONObject("order").getJSONObject("store").getDouble("latitude");
+                                    String addressCustomer = response.getJSONObject("order").getJSONObject("customer").getString("address");
                                     LatLng locationCustomer = getLocationFromAddress(getBaseContext(), addressCustomer);
                                     LatLng locationStore = new LatLng(latitudeStore, longitudeStore);
+                                    Log.e("locationCustomer", "1" + locationCustomer);
+                                    Log.e("locationStore", "1" + locationStore);
                                     UiSettings uiSettings = mMap.getUiSettings();
                                     if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                         // TODO: Consider calling

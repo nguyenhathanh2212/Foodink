@@ -87,7 +87,7 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
 
         requestQueue = Volley.newRequestQueue(getContext());
         Intent intent = getActivity().getIntent();
-        shipperOrderID = intent.getIntExtra("SHIPPER_ORDER_ID", 0);
+        shipperOrderID = intent.getIntExtra("ORDER_ID", 0);
         listProducts = new ArrayList<>();
         productAdapter = new ShipperOrderProductAdapter(getActivity(), R.layout.item_product_shipper_order, listProducts);
         lvProducts.setAdapter(productAdapter);
