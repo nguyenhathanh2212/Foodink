@@ -8,13 +8,15 @@ import java.text.DecimalFormat;
 
 public class ShipperOrder {
     private int orderID;
+    private int shipperOrderID;
     private String storeName;
     private String receiverName;
     private float shipCost;
     private String orderStatus;
     private String storeImage;
 
-    public ShipperOrder(int orderID, String storeName, String receiverName, float shipCost, String orderStatus, String storeImage) {
+    public ShipperOrder(int orderID, int shipperOrderID, String storeName, String receiverName, float shipCost, String orderStatus, String storeImage) {
+        this.shipperOrderID = shipperOrderID;
         this.orderID = orderID;
         this.storeName = storeName;
         this.receiverName = receiverName;
@@ -79,5 +81,13 @@ public class ShipperOrder {
 
     public void setStoreImage(String storeImage) {
         this.storeImage = storeImage;
+    }
+
+    public int getShipperOrderID() {
+        return shipperOrderID;
+    }
+
+    public void setShipperOrderID(int shipperOrderID) {
+        this.shipperOrderID = shipperOrderID;
     }
 }

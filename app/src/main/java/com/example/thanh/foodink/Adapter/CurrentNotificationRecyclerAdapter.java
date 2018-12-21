@@ -44,7 +44,7 @@ public class CurrentNotificationRecyclerAdapter extends RecyclerView.Adapter<Cur
         Notification notification = listData.get(i);
         viewHolder.tvStoreName.setText(notification.getStoreName());
         viewHolder.tvStoreAddress.setText(notification.getStoreAddress());
-        viewHolder.tvDistanceToStore.setText(notification.getDistanceToStore() + "m");
+        viewHolder.tvDistanceToStore.setText(notification.getDistanceToStore() + " km");
         viewHolder.tvShipCost.setText(notification.getShipCost());
 
         String imageUrl = listData.get(i).getImgStore();

@@ -196,7 +196,7 @@ public class NotificationFirebaseMessagingService extends FirebaseMessagingServi
             notification = new com.example.thanh.foodink.Models.Notification(orderId, storeName, storeAddress, storeImg, distanceToStore, shipCost);
             notificationId = new Random().nextInt();
             String title = "Bạn có một đơn hàng từ " + notification.getStoreName();
-            String message = "Địa chỉ: " + notification.getStoreAddress() + "\nTiền ship: " + notification.getShipCost() + "\nKhoảng cách: " + notification.getDistanceToStore() + " m";
+            String message = "Địa chỉ: " + notification.getStoreAddress() + "\nTiền ship: " + notification.getShipCost() + "\nKhoảng cách: " + notification.getDistanceToStore() + " km";
 
             SessionManager sessionManager = SessionManager.getInstant(getApplicationContext());
             String notificationsJson = sessionManager.get("NOTIFICATION_LIST");
