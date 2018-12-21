@@ -67,7 +67,8 @@ public class ShipperOrderListRecyclerAdapter extends RecyclerView.Adapter<Shippe
             public void onClickItem(View view, int position, boolean isLongClick) {
                 Intent intent = new Intent(view.getContext(), ShipperOrderDetailActivity.class);
                 intent.setAction(ShipperOrderDetailActivity.SHOW_RECEIVED_ORDER_ACTION);
-                intent.putExtra("SHIPPER_ORDER_ID", listData.get(position).getOrderID());
+                intent.putExtra("SHIPPER_ORDER_ID", listData.get(position).getShipperOrderID());
+                intent.putExtra("ORDER_ID", listData.get(position).getOrderID());
                 intent.putExtra("STORE_NAME", listData.get(position).getStoreName());
                 view.getContext().startActivity(intent);
             }

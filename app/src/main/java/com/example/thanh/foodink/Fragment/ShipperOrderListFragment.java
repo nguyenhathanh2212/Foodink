@@ -90,6 +90,7 @@ public class ShipperOrderListFragment extends Fragment {
                                 for (int i = 0; i < shipperOrders.length(); i++) {
                                     JSONObject shipperOrder = (JSONObject) shipperOrders.get(i);
                                     JSONObject order = (JSONObject) shipperOrder.get("order");
+                                    int orderID = order.getInt("id");
                                     JSONObject store = (JSONObject) order.get("store");
                                     JSONObject customer = (JSONObject) order.get("customer");
 
@@ -99,7 +100,7 @@ public class ShipperOrderListFragment extends Fragment {
                                     String customerName = customer.getString("name");
                                     float shipCost = (float) order.getDouble("ship_cost");
 
-                                    ShipperOrder shipperOrderObj = new ShipperOrder(shipperOrderID, storeName, customerName, shipCost, orderStatus, "");
+                                    ShipperOrder shipperOrderObj = new ShipperOrder(orderID, shipperOrderID, storeName, customerName, shipCost, orderStatus, "");
                                     listShipperOrder.add(shipperOrderObj);
                                 }
 

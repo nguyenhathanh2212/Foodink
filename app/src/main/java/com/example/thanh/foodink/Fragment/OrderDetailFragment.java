@@ -120,7 +120,7 @@ public class OrderDetailFragment extends Fragment implements View.OnClickListene
                                 tvStorePhone.setText(store.getString("phone"));
 
                                 tvCustomerName.setText(customer.getString("name"));
-                                tvCustomerAddress.setText(customer.getString("address"));
+                                tvCustomerAddress.setText(order.getString("address"));
                                 tvCustomerPhone.setText(customer.getString("phone"));
 
                                 float shipCost = (float) order.getDouble("ship_cost");

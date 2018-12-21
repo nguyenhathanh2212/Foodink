@@ -358,7 +358,7 @@ public class ShipperOrderDetailActivity extends AppCompatActivity implements Vie
         mMap = googleMap;
         progress.show();
         try {
-            int orderID = intent.getIntExtra("SHIPPER_ORDER_ID", 0);
+            int orderID = intent.getIntExtra("ORDER_ID", 0);
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
                     ApiUrl.API_ORDER + "/" + orderID,
